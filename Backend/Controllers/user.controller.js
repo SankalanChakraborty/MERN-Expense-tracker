@@ -6,15 +6,21 @@ import { errorHandler } from "../Middlewares/auth.middleware.js";
 export const registerUser = async (req, res, next) => {
   const { userName, email, password, confirmPassword } = req.body;
   if (!userName || !email || !password || !confirmPassword) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res
+      .status(400)
+      .json({ status: "error", message: "All fields are required" });
   }
   if (password !== confirmPassword) {
-    return res.status(400).json({ message: "Passwords do not match" });
+    return res
+      .status(400)
+      .json({ status: "error", message: "Passwords do not match" });
   }
 
   const user = await User.findOne({ email });
   if (user) {
-    return res.status(400).json({ message: "User already exists" });
+    return res
+      .status(400)
+      .json({ status: "error", message: "User already exists" });
   }
   // Hash the password and save the user
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -28,12 +34,8 @@ export const registerUser = async (req, res, next) => {
     await newUser.save();
 
     res.status(201).json({
+      status: "success",
       message: "User registered successfully",
-      user: {
-        id: newUser._id,
-        userName: newUser.userName,
-        email: newUser.email,
-      },
     });
   } catch (error) {
     next(error);
@@ -43,21 +45,27 @@ export const registerUser = async (req, res, next) => {
 export const userLogin = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
+    return res
+      .status(400)
+      .json({ status: "error", message: "Email and password are required" });
   }
 
   const user = await User.findOne({ email }).select("+password");
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!user || !isPasswordValid) {
-    return res.status(401).json({ message: "Invalid email or password" });
+    return res
+      .status(401)
+      .json({ status: "error", message: "Invalid email or password" });
   }
 
   if (
     !process.env.JWT_SECRET_ACCESS_TOKEN ||
     !process.env.JWT_SECRET_REFRESH_TOKEN
   ) {
-    return res.status(500).json({ message: "Server misconfiguration" });
+    return res
+      .status(500)
+      .json({ status: "error", message: "Server misconfiguration" });
   }
 
   const accessToken = jwt.sign(
@@ -95,6 +103,7 @@ export const userLogin = async (req, res, next) => {
     });
 
     res.status(200).json({
+      status: "success",
       message: "Login successful",
       user: {
         id: user._id,
@@ -111,7 +120,9 @@ export const refreshToken = async (req, res, next) => {
   const { refreshToken } = req.cookies;
 
   if (!refreshToken) {
-    return res.status(401).json({ message: "Refresh token is missing" });
+    return res
+      .status(401)
+      .json({ status: "error", message: "Refresh token is missing" });
   }
 
   try {
@@ -121,7 +132,9 @@ export const refreshToken = async (req, res, next) => {
     );
     const user = await User.findById(decoded.userId);
     if (!user || user.refreshToken !== refreshToken) {
-      return res.status(403).json({ message: "Invalid refresh token" });
+      return res
+        .status(403)
+        .json({ status: "error", message: "Invalid refresh token" });
     }
     //   Generate a new access token
     const newAccessToken = jwt.sign(
@@ -138,7 +151,7 @@ export const refreshToken = async (req, res, next) => {
       sameSite: "strict",
       maxAge: 15 * 60 * 1000,
     });
-    res.status(200).json({ message: "Token refreshed" });
+    res.status(200).json({ status: "success", message: "Token refreshed" });
   } catch (error) {
     next(error);
   }
@@ -151,7 +164,7 @@ export const userLogout = async (req, res, next) => {
 
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
-    res.status(200).json({ message: "Logout successful" });
+    res.status(200).json({ status: "success", message: "Logout successful" });
   } catch (error) {
     next(error);
   }

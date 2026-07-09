@@ -1,6 +1,12 @@
-import { Box, Typography, Container } from "@mui/material";
-import Input from "../Components/Input";
-import Button from "../Components/Button";
+import {
+  Box,
+  Typography,
+  Container,
+  Link,
+  Paper,
+  TextField,
+  Button,
+} from "@mui/material";
 
 const Login = () => {
   return (
@@ -10,42 +16,65 @@ const Login = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        bgcolor: "background.default",
+        p: 2,
       }}
     >
       <Container maxWidth="sm">
-        <Box
+        <Paper
+          elevation={6}
           sx={{
+            p: { xs: 3, sm: 4 },
+            borderRadius: 4,
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
             gap: 3,
+            backgroundColor: "background.paper",
           }}
         >
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              fontWeight: "bold",
-              color: "#ffffff",
-              textAlign: "center",
-            }}
-          >
-            Expense Tracker
+          <Box sx={{ textAlign: "center" }}>
+            <Typography
+              variant="h4"
+              component="h1"
+              sx={{ fontWeight: 700, color: "text.primary" }}
+            >
+              Expense Tracker
+            </Typography>
+            <Typography variant="body1" sx={{ color: "text.secondary", mt: 1 }}>
+              Track your monthly expenses
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: "grid", gap: 2 }}>
+            <TextField id="email" label="Email" variant="outlined" fullWidth />
+            <TextField
+              id="password"
+              label="Password"
+              variant="outlined"
+              type="password"
+              fullWidth
+            />
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{
+                py: 1.5,
+                fontSize: "1rem",
+                fontWeight: 600,
+                textTransform: "capitalize",
+              }}
+            >
+              Sign in
+            </Button>
+          </Box>
+
+          <Typography sx={{ color: "text.secondary", textAlign: "center" }}>
+            Don't have an account?{" "}
+            <Link href="/register" underline="hover" color="primary">
+              Sign up
+            </Link>
           </Typography>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              color: "#b0b0b0",
-              textAlign: "center",
-              marginBottom: 2,
-            }}
-          >
-            Track your monthly expenses
-          </Typography>
-          <Input id="email" label="Email" variant="outlined" />
-          <Input id="password" label="Password" variant="outlined" />
-          <Button label="Sign in" variant="contained" />
-        </Box>
+        </Paper>
       </Container>
     </Box>
   );

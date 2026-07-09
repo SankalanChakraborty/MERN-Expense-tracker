@@ -1,6 +1,6 @@
 // middlewares/rateLimiter.middleware.js
 
-import rateLimit from "express-rate-limit";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 
 export const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -8,10 +8,11 @@ export const loginLimiter = rateLimit({
   message: "Too many login attempts, try again later",
   standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
   legacyHeaders: false, // Disable `X-RateLimit-*` headers
-  keyGenerator: (req, res) => req.ip, // Key by IP
+  keyGenerator: (req) => ipKeyGenerator(req.ip), // Key by IP
   skip: (req, res) => process.env.NODE_ENV === "development", // Skip in dev
   handler: (req, res) => {
     res.status(429).json({
+      status: "error",
       message: "Too many login attempts, try again later",
     });
   },
@@ -19,7 +20,7 @@ export const loginLimiter = rateLimit({
 
 export const registerLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 3, // 3 attempts
+  max: 23, // 3 attempts
   message: "Too many registration attempts, try again later",
   standardHeaders: true,
   legacyHeaders: false,
