@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../Models/user.model.js";
-import { errorHandler } from "../Middlewares/auth.middleware.js";
+import cookieOptions from "../Utils/cookieOptions.js";
 
 export const registerUser = async (req, res, next) => {
   const { userName, email, password, confirmPassword } = req.body;
@@ -51,9 +51,16 @@ export const userLogin = async (req, res, next) => {
   }
 
   const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return res
+      .status(401)
+      .json({ status: "error", message: "Invalid email or password" });
+  }
+
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  if (!user || !isPasswordValid) {
+  if (!isPasswordValid) {
     return res
       .status(401)
       .json({ status: "error", message: "Invalid email or password" });
@@ -89,16 +96,12 @@ export const userLogin = async (req, res, next) => {
     await User.findByIdAndUpdate(user._id, { refreshToken });
 
     res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      ...cookieOptions,
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      ...cookieOptions,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -146,9 +149,7 @@ export const refreshToken = async (req, res, next) => {
     );
     //   Set the new access token in a cookie
     res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      ...cookieOptions,
       maxAge: 15 * 60 * 1000,
     });
     res.status(200).json({ status: "success", message: "Token refreshed" });
@@ -162,8 +163,8 @@ export const userLogout = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(id, { refreshToken: null });
 
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken", { path: "/" });
+    res.clearCookie("refreshToken", { path: "/" });
     res.status(200).json({ status: "success", message: "Logout successful" });
   } catch (error) {
     next(error);
