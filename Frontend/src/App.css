@@ -2,6 +2,7 @@
 
 :root {
   --color-accent: #f59e0b;
+  --color-toast-text: #101011;
   --color-accent-soft: rgba(245, 158, 11, 0.1);
   --color-accent-soft-border: rgba(245, 158, 11, 0.2);
   --color-accent-hover-border: rgba(245, 158, 11, 0.35);
@@ -13,11 +14,15 @@
   --color-text-muted: #94a3b8;
   --color-input-border: rgba(255, 255, 255, 0.1);
   --color-input-border-strong: rgba(255, 255, 255, 0.07);
-  --color-chart-blue: #3b82f6;
-  --color-chart-red: #ef4444;
-  --color-chart-green: #10b981;
-  --color-chart-purple: #8b5cf6;
+  --color-blue: #3b82f6;
+  --color-red: #ef4444;
+  --color-green: #10b981;
+  --color-purple: #8b5cf6;
   --color-input-text: #f1f5f9;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 }
 
 * {

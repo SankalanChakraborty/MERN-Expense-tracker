@@ -1,0 +1,43 @@
+.dashboard-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+  width: 25%;
+  height: 100vh;
+  background-color: var(--color-page-bg);
+}
+
+.menu-container .menu-item {
+  display: flex;
+  gap: 16px;
+  cursor: pointer;
+  padding: 15px 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h3 {
+  color: var(--color-text-primary);
+}
+
+.menu-item svg,
+.menu-item span {
+  color: var(--color-text-secondary);
+}
+
+.highlight {
+  color: var(--color-accent);
+}
+
+.menu-container .menu-item:hover {
+  background-color: var(--color-accent-hover-border);
+  border-radius: 6px;
+}
+
+.menu-container .menu-item:hover svg,
+.menu-container .menu-item:hover span {
+  color: var(--color-accent);
+}

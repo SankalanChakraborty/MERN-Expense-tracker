@@ -1,0 +1,47 @@
+.toast-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 250px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background-color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-toast-text);
+}
+
+.toast-container svg {
+  flex-shrink: 0;
+}
+
+.success {
+  border-left: 3px solid var(--color-green);
+}
+
+.success svg {
+  color: var(--color-green);
+}
+
+.error {
+  border-left: 3px solid var(--color-red);
+}
+
+.error svg {
+  color: var(--color-red);
+}
+
+.info {
+  border-left: 3px solid var(--color-blue);
+}
+
+.info svg {
+  color: var(--color-blue);
+}
+
+.warning {
+  border-left: 3px solid var(--color-purple);
+}
+
+.warning svg {
+  color: var(--color-purple);
+}

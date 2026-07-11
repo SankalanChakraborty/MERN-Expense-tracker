@@ -1,10 +1,13 @@
 import type { User } from "../App";
+import Sidebar from "../Components/Sidebar";
+import type { ToastProps } from "../Components/Toast";
 
 interface DashboardProps {
   loggedinUser: User | null;
+  setToastMessage: (message: ToastProps) => void;
 }
 
-const Dashboard = ({ loggedinUser }: DashboardProps) => {
+const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
   const navigateToLogin = () => {
     setTimeout(() => {
       window.location.href = "/login";
@@ -21,6 +24,7 @@ const Dashboard = ({ loggedinUser }: DashboardProps) => {
       console.log(data);
       if (data.status === "success") {
         navigateToLogin();
+        setToastMessage({ message: data.message, severity: "success" });
       }
     } catch (error) {
       console.error("Error during logout:", error);
@@ -29,7 +33,7 @@ const Dashboard = ({ loggedinUser }: DashboardProps) => {
 
   return (
     <div>
-      <span>Welcome, {loggedinUser?.userName}!</span>
+      <Sidebar />
       <button onClick={handleLogout}>Logout</button>
     </div>
   );

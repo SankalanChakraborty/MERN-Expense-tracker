@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import type { ToastProps } from "../App";
+import type { ToastProps } from "../Components/Toast";
 import { useNavigate, Link } from "react-router-dom";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import "../Styles/Login.css";
@@ -45,15 +45,15 @@ const RegisterUser = ({ setToastMessage }: RegisterUserProps) => {
       const data = await response.json();
       console.log(data);
       if (data.status === "success") {
-        setToastMessage({ toastMessage: data.message, severity: "success" });
+        setToastMessage({ message: data.message, severity: "success" });
         navigateToLogin();
       } else {
-        setToastMessage({ toastMessage: data.message, severity: "error" });
+        setToastMessage({ message: data.message, severity: "error" });
       }
     } catch (error) {
       console.error("Error during registration:", error);
       setToastMessage({
-        toastMessage: "An error occurred during registration.",
+        message: "An error occurred during registration.",
         severity: "error",
       });
     }

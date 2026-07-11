@@ -165,11 +165,11 @@
 }
 
 .chart-legend-item .chart-color:nth-child(2) {
-  background: var(--color-chart-blue);
+  background: var(--color-blue);
 }
 
 .chart-legend-item .chart-color:nth-child(3) {
-  background: var(--color-chart-red);
+  background: var(--color-red);
 }
 
 .chart-legend-item .chart-label {
@@ -203,16 +203,16 @@
   background: var(--color-accent);
 }
 .expense-legends div:nth-child(2) .sample-chart-color {
-  background: var(--color-chart-blue);
+  background: var(--color-blue);
 }
 .expense-legends div:nth-child(3) .sample-chart-color {
-  background: var(--color-chart-red);
+  background: var(--color-red);
 }
 .expense-legends div:nth-child(4) .sample-chart-color {
-  background: var(--color-chart-green);
+  background: var(--color-green);
 }
 .expense-legends div:nth-child(5) .sample-chart-color {
-  background: var(--color-chart-purple);
+  background: var(--color-purple);
 }
 
 .expense-legends .sample-chart-label {

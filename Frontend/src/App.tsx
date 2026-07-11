@@ -5,11 +5,8 @@ import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import AddExpense from "./Pages/AddExpense";
 import { useEffect, useState } from "react";
-
-export interface ToastProps {
-  toastMessage: string;
-  severity?: "success" | "error" | "warning" | "info";
-}
+import Toast from "./Components/Toast";
+import type { ToastProps } from "./Components/Toast";
 
 export interface User {
   readonly id: string;
@@ -26,14 +23,19 @@ function App() {
 
     const timer = window.setTimeout(() => {
       setToastMessage(null);
-    }, 2000);
+    }, 3000);
 
     return () => window.clearTimeout(timer);
   }, [toastMessage]);
 
   return (
     <>
-      {toastMessage && <div role="alert">{toastMessage.toastMessage}</div>}
+      {toastMessage && (
+        <Toast
+          message={toastMessage.message}
+          severity={toastMessage.severity}
+        />
+      )}
       <BrowserRouter>
         <Routes>
           <Route
@@ -51,7 +53,12 @@ function App() {
           />
           <Route
             path="/dashboard"
-            element={<Dashboard loggedinUser={loggedinUser} />}
+            element={
+              <Dashboard
+                loggedinUser={loggedinUser}
+                setToastMessage={setToastMessage}
+              />
+            }
           />
           <Route path="/add-expense" element={<AddExpense />} />
         </Routes>

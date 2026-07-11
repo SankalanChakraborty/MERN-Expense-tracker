@@ -6,9 +6,10 @@ import "../Styles/Login.css";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import WebInfo from "../Components/WebInfo";
+import type { ToastProps } from "../Components/Toast";
 
 interface LoginProps {
-  setToastMessage: (message: any) => void;
+  setToastMessage: (message: ToastProps) => void;
   setLoggedinUser: (user: User | null) => void;
 }
 
@@ -37,14 +38,14 @@ const Login = ({ setToastMessage, setLoggedinUser }: LoginProps) => {
       const data = await response.json();
       console.log(data);
       if (data.status === "success") {
-        setToastMessage({ toastMessage: data.message, severity: "success" });
+        setToastMessage({ message: data.message, severity: "success" });
       }
       setLoggedinUser(data.user);
       navigateToDashboard();
     } catch (error) {
       console.error("Error during login:", error);
       setToastMessage({
-        toastMessage: "An error occurred during login.",
+        message: "An error occurred during login.",
         severity: "error",
       });
     }
