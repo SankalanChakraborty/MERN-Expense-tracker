@@ -6,6 +6,8 @@
   padding: 10px 20px;
   border-radius: 8px;
   font-weight: 600;
+  background: none;
+  outline: none;
   border: none;
   cursor: pointer;
 }
@@ -17,11 +19,29 @@
   background: #080e1e;
   color: #ffffff;
   font-size: 14px;
-  border: 1px solid #64748b;
+  border: 1px solid var(--color-text-secondary);
   transition: all 0.3s ease-in-out;
 }
 
 .auth-button:hover {
   color: #ffffff;
-  border: 1px solid #f59e0b;
+  border: 1px solid var(--color-accent);
+}
+
+.add-expense {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--color-accent-soft-border);
+  color: var(--color-text-primary);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.04));
+  transition: all 0.25s ease-in-out;
+}
+
+.add-expense:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.1));
+  border-color: var(--color-accent);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
 }

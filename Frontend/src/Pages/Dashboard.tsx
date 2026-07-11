@@ -1,6 +1,10 @@
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import type { User } from "../App";
+import Button from "../Components/Button";
+import OverviewCards from "../Components/OverviewCards";
 import Sidebar from "../Components/Sidebar";
 import type { ToastProps } from "../Components/Toast";
+import "../Styles/Dashboard.css";
 
 interface DashboardProps {
   loggedinUser: User | null;
@@ -8,6 +12,29 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
+  const expenseOverview = [
+    {
+      cardHeading: "Total Spent",
+      amount: 24300,
+      status: "12% greater than last month",
+    },
+    {
+      cardHeading: "Remaining",
+      amount: 6700,
+      status: "On track",
+    },
+    {
+      cardHeading: "Transactions",
+      numberOfTransactions: 38,
+      status: "",
+    },
+    {
+      cardHeading: "Savings Goal",
+      savingsPerentage: 68,
+      status: "₹8.2K saved",
+    },
+  ];
+
   const navigateToLogin = () => {
     setTimeout(() => {
       window.location.href = "/login";
@@ -32,9 +59,41 @@ const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
   };
 
   return (
-    <div>
+    <div className="dashboard-container">
       <Sidebar />
-      <button onClick={handleLogout}>Logout</button>
+      <div className="dashboard-details-container">
+        <div className="dashboard-header">
+          <div className="welcome-message">
+            <h3>Good Morning, {loggedinUser?.userName}</h3>
+            <span>Here's your July 2025 overview</span>
+          </div>
+
+          <Button
+            className={"add-expense"}
+            type={"button"}
+            icon={faPlus}
+            onClick={handleLogout}
+          >
+            Add Expense
+          </Button>
+        </div>
+        <div className="expense-overview">
+          {expenseOverview.map((overviewItem, index) => (
+            <OverviewCards
+              key={overviewItem.cardHeading}
+              cardHeading={overviewItem.cardHeading}
+              status={overviewItem.status}
+              amount={overviewItem.amount}
+              numberOfTransactions={overviewItem.numberOfTransactions}
+              savingsPerentage={overviewItem.savingsPerentage}
+            />
+          ))}
+        </div>
+      </div>
+
+      <Button type={"button"} icon={faPlus} onClick={handleLogout}>
+        Logout
+      </Button>
     </div>
   );
 };

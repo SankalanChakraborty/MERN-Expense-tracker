@@ -7,11 +7,17 @@
   background-color: var(--color-page-bg);
 }
 
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .menu-container .menu-item {
   display: flex;
   gap: 16px;
   cursor: pointer;
-  padding: 15px 10px;
+  padding: 10px;
   transition: all 0.3s ease-in-out;
 }
 
@@ -34,10 +40,17 @@
 
 .menu-container .menu-item:hover {
   background-color: var(--color-accent-hover-border);
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 .menu-container .menu-item:hover svg,
-.menu-container .menu-item:hover span {
+.menu-container .menu-item:hover span,
+.menu-container .menu-item.active svg,
+.menu-container .menu-item.active span {
   color: var(--color-accent);
+}
+
+.menu-container .menu-item.active {
+  background-color: var(--color-accent-hover-border);
+  border-radius: 10px;
 }

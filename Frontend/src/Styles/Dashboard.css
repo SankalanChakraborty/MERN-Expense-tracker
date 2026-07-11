@@ -1,0 +1,28 @@
+.dashboard-container {
+  display: flex;
+  gap: 16px;
+}
+
+.dashboard-details-container {
+  padding: 40px 20px;
+}
+
+.dashboard-details-container .dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.dashboard-header .welcome-message h3 {
+  font-size: 24px;
+  color: var(--color-text-primary);
+}
+
+.dashboard-header .welcome-message span {
+  color: var(--color-text-secondary);
+}
+
+.dashboard-details-container .expense-overview {
+  display: flex;
+  gap: 16px;
+}

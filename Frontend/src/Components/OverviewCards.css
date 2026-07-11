@@ -1,0 +1,23 @@
+.overview-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 200px;
+  padding: 20px;
+  background-color: var(--color-page-bg);
+  border-radius: 16px;
+}
+
+.overview-cards-container .card-heading {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.overview-cards-container .card-amount,
+.overview-cards-container .number-of-transactions,
+.overview-cards-container .savings-percentage {
+  font-size: 20px;
+  color: var(--color-text-primary);
+  font-size: 24px;
+  font-weight: var(--font-weight-semibold);
+}
