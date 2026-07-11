@@ -1,0 +1,262 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+
+.login-container .login-form,
+.login-container .web-info {
+  flex: 1;
+  height: 100%;
+}
+
+.login-container .web-info {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px 40px;
+}
+
+.web-info .pill-info {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent-soft-border);
+  color: var(--color-accent);
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.web-info h1 {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.web-info .highlight {
+  color: var(--color-accent);
+}
+
+.web-info .sub-info {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.web-info .more-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--color-panel);
+  border-radius: 10px;
+  border: 1px solid var(--color-input-border-strong);
+}
+
+.web-info .more-info svg {
+  padding: 6px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  border-radius: 8px;
+}
+
+.web-info .more-info span {
+  color: var(--color-text-secondary);
+  background: none;
+}
+
+.login-container .login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  width: 50%;
+  padding: 20px 40px;
+  background: var(--color-page-bg);
+}
+
+.login-form .welcome-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: none;
+}
+
+.login-form .welcome-header h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.login-form span,
+.login-form label {
+  color: var(--color-text-secondary);
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-form .email-input,
+.login-form .password-input {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-form .email-input input,
+.login-form .password-input input {
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--color-panel);
+  border: 1px solid var(--color-input-border);
+  color: var(--color-input-text);
+  font-size: 14px;
+  width: 100%;
+  transition:
+    border-color 0.25s ease,
+    transform 0.2s ease,
+    background-color 0.25s ease;
+  outline: none;
+}
+
+.login-form .email-input input:hover,
+.login-form .password-input input:hover {
+  border-color: var(--color-accent-hover-border);
+  transform: translateY(-1px);
+}
+
+.login-form .email-input input:focus,
+.login-form .password-input input:focus {
+  border-color: var(--color-accent);
+  background: var(--color-panel-hover);
+  transform: translateY(-1px);
+}
+
+.login-form .email-input input::placeholder,
+.login-form .password-input input::placeholder {
+  color: var(--color-text-secondary);
+  transition: color 0.25s ease;
+}
+
+.login-form .email-input input:focus::placeholder,
+.login-form .password-input input:focus::placeholder {
+  color: var(--color-text-muted);
+}
+
+.login-form .create-new-account {
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.login-form .create-new-account a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.sample-chart-data-adv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-panel);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.chart-data {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.chart-data .chart-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.chart-data .chart-legend .chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-legend-item .chart-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.chart-legend-item .chart-color:nth-child(1) {
+  background: var(--color-accent);
+}
+
+.chart-legend-item .chart-color:nth-child(2) {
+  background: var(--color-chart-blue);
+}
+
+.chart-legend-item .chart-color:nth-child(3) {
+  background: var(--color-chart-red);
+}
+
+.chart-legend-item .chart-label {
+  width: 100px;
+  color: var(--color-text-secondary);
+}
+
+.chart-legend-item .chart-value {
+  color: var(--color-text-primary);
+}
+
+.expense-legends {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.expense-legends div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expense-legends .sample-chart-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.expense-legends div:nth-child(1) .sample-chart-color {
+  background: var(--color-accent);
+}
+.expense-legends div:nth-child(2) .sample-chart-color {
+  background: var(--color-chart-blue);
+}
+.expense-legends div:nth-child(3) .sample-chart-color {
+  background: var(--color-chart-red);
+}
+.expense-legends div:nth-child(4) .sample-chart-color {
+  background: var(--color-chart-green);
+}
+.expense-legends div:nth-child(5) .sample-chart-color {
+  background: var(--color-chart-purple);
+}
+
+.expense-legends .sample-chart-label {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  width: 70px;
+}

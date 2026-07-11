@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
+:root {
+  --color-accent: #f59e0b;
+  --color-accent-soft: rgba(245, 158, 11, 0.1);
+  --color-accent-soft-border: rgba(245, 158, 11, 0.2);
+  --color-accent-hover-border: rgba(245, 158, 11, 0.35);
+  --color-panel: #1a2744;
+  --color-panel-hover: #22304f;
+  --color-page-bg: #0f172a;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-input-border: rgba(255, 255, 255, 0.1);
+  --color-input-border-strong: rgba(255, 255, 255, 0.07);
+  --color-chart-blue: #3b82f6;
+  --color-chart-red: #ef4444;
+  --color-chart-green: #10b981;
+  --color-chart-purple: #8b5cf6;
+  --color-input-text: #f1f5f9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+html,
+body,
+#root {
+  background-color: #080e1e;
+  min-height: 100vh;
+}

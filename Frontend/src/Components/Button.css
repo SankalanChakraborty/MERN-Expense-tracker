@@ -1,0 +1,27 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.auth-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #080e1e;
+  color: #ffffff;
+  font-size: 14px;
+  border: 1px solid #64748b;
+  transition: all 0.3s ease-in-out;
+}
+
+.auth-button:hover {
+  color: #ffffff;
+  border: 1px solid #f59e0b;
+}
