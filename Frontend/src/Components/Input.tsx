@@ -1,3 +1,5 @@
+import "./Input.css";
+
 interface InputProps {
   id?: string;
   name?: string;
@@ -31,7 +33,7 @@ const Input = ({
       placeholder={placeholder}
       required={required}
       disabled={disabled}
-      className={className}
+      className={`input-field ${className || ""}`.trim()}
     />
   );
 };

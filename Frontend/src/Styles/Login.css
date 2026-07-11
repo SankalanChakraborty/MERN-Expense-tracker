@@ -112,46 +112,6 @@
   gap: 6px;
 }
 
-.login-form .email-input input,
-.login-form .password-input input {
-  border-radius: 10px;
-  padding: 12px 14px;
-  background: var(--color-panel);
-  border: 1px solid var(--color-input-border);
-  color: var(--color-input-text);
-  font-size: 14px;
-  width: 100%;
-  transition:
-    border-color 0.25s ease,
-    transform 0.2s ease,
-    background-color 0.25s ease;
-  outline: none;
-}
-
-.login-form .email-input input:hover,
-.login-form .password-input input:hover {
-  border-color: var(--color-accent-hover-border);
-  transform: translateY(-1px);
-}
-
-.login-form .email-input input:focus,
-.login-form .password-input input:focus {
-  border-color: var(--color-accent);
-  background: var(--color-panel-hover);
-  transform: translateY(-1px);
-}
-
-.login-form .email-input input::placeholder,
-.login-form .password-input input::placeholder {
-  color: var(--color-text-secondary);
-  transition: color 0.25s ease;
-}
-
-.login-form .email-input input:focus::placeholder,
-.login-form .password-input input:focus::placeholder {
-  color: var(--color-text-muted);
-}
-
 .login-form .create-new-account {
   text-align: center;
   color: var(--color-text-secondary);
