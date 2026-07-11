@@ -26,7 +26,7 @@ const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
     {
       cardHeading: "Transactions",
       numberOfTransactions: 38,
-      status: "",
+      status: "This month",
     },
     {
       cardHeading: "Savings Goal",

@@ -25,7 +25,13 @@ const OverviewCards = ({
       {savingsPerentage && (
         <span className="savings-percentage">{savingsPerentage}%</span>
       )}
-      {status && <span className="status">{status}</span>}
+      {status && (
+        <span
+          className={`status ${status.includes("greater") ? "status-danger" : ""} ${status.includes("track") ? "status-green" : ""}`}
+        >
+          {status}
+        </span>
+      )}
     </div>
   );
 };
