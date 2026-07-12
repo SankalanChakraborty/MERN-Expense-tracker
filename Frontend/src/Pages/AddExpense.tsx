@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Input from "../Components/Input";
+import "../Styles/AddExpense.css";
 
 const categories = [
   "Groceries",
@@ -10,78 +13,124 @@ const categories = [
   "Other",
 ];
 
-const AddExpense = () => {
+interface AddExpenseProps {
+  setShowAddExpense: (state: boolean) => void;
+}
+
+const AddExpense = ({ setShowAddExpense }: AddExpenseProps) => {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState(categories[0]);
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [note, setNote] = useState("");
   const [recurring, setRecurring] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const hideAddExpenseModal = () => {
+    setShowAddExpense(false);
+  };
+
+  const handleSaveNewExpense = (event: React.FormEvent<HTMLFormElement>) => {
+    console.log("Expense save logic goes here");
     console.log({ amount, category, date, note, recurring });
   };
 
   return (
-    <div>
-      <div>
-        <h2>Add expense</h2>
-        <button type="button">X</button>
-      </div>
+    <div className="add-expense-page">
+      <div
+        className="add-expense-modal-overlay"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className="add-expense-modal">
+          <div className="add-expense-modal-header">
+            <div>
+              <p className="add-expense-eyebrow">New entry</p>
+              <h2>Add expense</h2>
+            </div>
+            <button
+              type="button"
+              className="close-button"
+              onClick={hideAddExpenseModal}
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="amount">Amount</label>
-        <input
-          id="amount"
-          type="number"
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-        />
+          <form className="add-expense-form" onSubmit={handleSaveNewExpense}>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="amount">Amount</label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={amount}
+                  onChange={(event) => setAmount(event.target.value)}
+                  placeholder="0.00"
+                />
+              </div>
 
-        <label htmlFor="category">Category</label>
-        <select
-          id="category"
-          value={category}
-          onChange={(event) => setCategory(event.target.value)}
-        >
-          {categories.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+              <div className="form-group">
+                <label htmlFor="category">Category</label>
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(event) => setCategory(event.target.value)}
+                >
+                  {categories.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <label htmlFor="date">Date</label>
-        <input
-          id="date"
-          type="date"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-        />
+              <div className="form-group">
+                <label htmlFor="date">Date</label>
+                <Input
+                  id="date"
+                  type="date"
+                  value={date}
+                  onChange={(event) => setDate(event.target.value)}
+                />
+              </div>
 
-        <label htmlFor="note">Note</label>
-        <textarea
-          id="note"
-          value={note}
-          onChange={(event) => setNote(event.target.value)}
-          rows={4}
-          placeholder="Optional note"
-        />
+              <div className="form-group">
+                <label htmlFor="note">Note</label>
+                <textarea
+                  id="note"
+                  value={note}
+                  onChange={(event) => setNote(event.target.value)}
+                  rows={4}
+                  placeholder="Optional note"
+                />
+              </div>
+            </div>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={recurring}
-            onChange={(event) => setRecurring(event.target.checked)}
-          />
-          Recurring monthly
-        </label>
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={recurring}
+                onChange={(event) => setRecurring(event.target.checked)}
+              />
+              Recurring monthly
+            </label>
 
-        <div>
-          <button type="button">Cancel</button>
-          <button type="submit">Save expense</button>
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="secondary-btn"
+                onClick={hideAddExpenseModal}
+              >
+                Cancel
+              </button>
+              <button type="submit" className="primary-btn">
+                Save expense
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

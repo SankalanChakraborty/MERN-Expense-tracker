@@ -34,12 +34,20 @@
   align-items: center;
   border: 1px solid var(--color-accent-soft-border);
   color: var(--color-text-primary);
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.12),
+    rgba(245, 158, 11, 0.04)
+  );
   transition: all 0.25s ease-in-out;
 }
 
 .add-expense:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.22),
+    rgba(245, 158, 11, 0.1)
+  );
   border-color: var(--color-accent);
   color: #ffffff;
   transform: translateY(-1px);

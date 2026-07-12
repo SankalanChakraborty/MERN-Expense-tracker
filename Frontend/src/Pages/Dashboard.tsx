@@ -3,15 +3,16 @@ import type { User } from "../App";
 import Button from "../Components/Button";
 import OverviewCards from "../Components/OverviewCards";
 import Sidebar from "../Components/Sidebar";
-import type { ToastProps } from "../Components/Toast";
 import "../Styles/Dashboard.css";
+import { useState } from "react";
+import AddExpense from "./AddExpense";
 
 interface DashboardProps {
   loggedinUser: User | null;
-  setToastMessage: (message: ToastProps) => void;
 }
 
-const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
+const Dashboard = ({ loggedinUser }: DashboardProps) => {
+  const [showAddExpense, setShowAddExpense] = useState(false);
   const expenseOverview = [
     {
       cardHeading: "Total Spent",
@@ -35,27 +36,8 @@ const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
     },
   ];
 
-  const navigateToLogin = () => {
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 1000);
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      const data = await response.json();
-      console.log(data);
-      if (data.status === "success") {
-        navigateToLogin();
-        setToastMessage({ message: data.message, severity: "success" });
-      }
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
+  const handleAddExpense = () => {
+    setShowAddExpense(true);
   };
 
   return (
@@ -72,13 +54,13 @@ const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
             className={"add-expense"}
             type={"button"}
             icon={faPlus}
-            onClick={handleLogout}
+            onClick={handleAddExpense}
           >
             Add Expense
           </Button>
         </div>
         <div className="expense-overview">
-          {expenseOverview.map((overviewItem, index) => (
+          {expenseOverview.map((overviewItem) => (
             <OverviewCards
               key={overviewItem.cardHeading}
               cardHeading={overviewItem.cardHeading}
@@ -91,9 +73,15 @@ const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
         </div>
       </div>
 
-      <Button type={"button"} icon={faPlus} onClick={handleLogout}>
+      {showAddExpense ? (
+        <AddExpense setShowAddExpense={setShowAddExpense} />
+      ) : (
+        ""
+      )}
+
+      {/* <Button type={"button"} icon={faPlus} onClick={handleLogout}>
         Logout
-      </Button>
+      </Button> */}
     </div>
   );
 };

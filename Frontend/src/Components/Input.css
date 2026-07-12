@@ -14,8 +14,7 @@
 }
 
 .input-field:hover {
-  border-color: var(--color-accent-hover-border);
-  transform: translateY(-1px);
+  border-color: var(--color-input-hover);
 }
 
 .input-field:focus {

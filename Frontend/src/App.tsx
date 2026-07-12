@@ -53,14 +53,8 @@ function App() {
           />
           <Route
             path="/dashboard"
-            element={
-              <Dashboard
-                loggedinUser={loggedinUser}
-                setToastMessage={setToastMessage}
-              />
-            }
+            element={<Dashboard loggedinUser={loggedinUser} />}
           />
-          <Route path="/add-expense" element={<AddExpense />} />
         </Routes>
       </BrowserRouter>
     </>
