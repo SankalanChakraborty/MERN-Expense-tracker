@@ -1,24 +1,32 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Input from "../Components/Input";
 import "../Styles/AddExpense.css";
+import type { User } from "../App";
+import type { ToastProps } from "../Components/Toast";
 
 const categories = [
+  "Food",
   "Groceries",
-  "Transportation",
-  "Utilities",
+  "Transport",
+  "Utility Bill",
   "Entertainment",
   "Health",
   "Rent",
+  "Lending",
   "Other",
 ];
 
 interface AddExpenseProps {
   setShowAddExpense: (state: boolean) => void;
+  loggedInUser: User | null;
+  setToastMessage: (messgae: ToastProps) => void;
 }
 
-const AddExpense = ({ setShowAddExpense }: AddExpenseProps) => {
-  const navigate = useNavigate();
+const AddExpense = ({
+  setShowAddExpense,
+  loggedInUser,
+  setToastMessage,
+}: AddExpenseProps) => {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState(categories[0]);
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -29,9 +37,46 @@ const AddExpense = ({ setShowAddExpense }: AddExpenseProps) => {
     setShowAddExpense(false);
   };
 
-  const handleSaveNewExpense = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log("Expense save logic goes here");
-    console.log({ amount, category, date, note, recurring });
+  const resetForm = () => {
+    setAmount("");
+    setCategory(categories[0]);
+    setNote("");
+    setDate(new Date().toISOString().slice(0, 10));
+  };
+
+  const handleSaveNewExpense = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/expense/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ amount, category, date, note, recurring }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setToastMessage({
+          message: data.message ?? "Unable to add expense.",
+          severity: "error",
+        });
+        return;
+      }
+
+      console.log(data);
+      setShowAddExpense(false);
+      resetForm();
+    } catch (error) {
+      console.error("Error while adding new expense:", error);
+      setToastMessage({
+        message: "Unable to add expense. Please try again later.",
+        severity: "error",
+      });
+    }
   };
 
   return (

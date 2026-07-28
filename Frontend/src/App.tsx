@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RegisterUser from "./Pages/RegisterUser";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
-import AddExpense from "./Pages/AddExpense";
 import { useEffect, useState } from "react";
 import Toast from "./Components/Toast";
 import type { ToastProps } from "./Components/Toast";
@@ -27,6 +26,24 @@ function App() {
 
     return () => window.clearTimeout(timer);
   }, [toastMessage]);
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
+
+  const getUserProfile = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/auth/me", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLoggedinUser(data.user);
+      }
+    } catch (error) {
+      console.log("Error getting user profile", error);
+    }
+  };
 
   return (
     <>
@@ -53,7 +70,12 @@ function App() {
           />
           <Route
             path="/dashboard"
-            element={<Dashboard loggedinUser={loggedinUser} />}
+            element={
+              <Dashboard
+                loggedinUser={loggedinUser}
+                setToastMessage={setToastMessage}
+              />
+            }
           />
         </Routes>
       </BrowserRouter>

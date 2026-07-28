@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import ExpenseType from "../enum.js";
 const expenseSchema = new mongoose.Schema(
   {
     user: {
@@ -7,12 +7,12 @@ const expenseSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-      maxlength: 100,
-    },
+    // title: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    //   maxlength: 100,
+    // },
     amount: {
       type: Number,
       required: true,
@@ -29,7 +29,7 @@ const expenseSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
-    notes: {
+    note: {
       type: String,
       trim: true,
       maxlength: 500,
@@ -37,3 +37,6 @@ const expenseSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+const expenseModel = mongoose.model("Expense", expenseSchema);
+export default expenseModel;

@@ -6,13 +6,17 @@ import Sidebar from "../Components/Sidebar";
 import "../Styles/Dashboard.css";
 import { useState } from "react";
 import AddExpense from "./AddExpense";
+import type { ToastProps } from "../Components/Toast";
 
 interface DashboardProps {
   loggedinUser: User | null;
+  setToastMessage: (message: ToastProps) => void;
 }
 
-const Dashboard = ({ loggedinUser }: DashboardProps) => {
+const Dashboard = ({ loggedinUser, setToastMessage }: DashboardProps) => {
   const [showAddExpense, setShowAddExpense] = useState(false);
+
+  // will be exported from another file api/getDetails.ts
   const expenseOverview = [
     {
       cardHeading: "Total Spent",
@@ -26,11 +30,13 @@ const Dashboard = ({ loggedinUser }: DashboardProps) => {
     },
     {
       cardHeading: "Transactions",
+      amount: 0,
       numberOfTransactions: 38,
       status: "This month",
     },
     {
       cardHeading: "Savings Goal",
+      amount: 0,
       savingsPerentage: 68,
       status: "₹8.2K saved",
     },
@@ -74,7 +80,11 @@ const Dashboard = ({ loggedinUser }: DashboardProps) => {
       </div>
 
       {showAddExpense ? (
-        <AddExpense setShowAddExpense={setShowAddExpense} />
+        <AddExpense
+          setShowAddExpense={setShowAddExpense}
+          loggedInUser={loggedinUser}
+          setToastMessage={setToastMessage}
+        />
       ) : (
         ""
       )}

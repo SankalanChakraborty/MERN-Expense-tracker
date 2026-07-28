@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./Routes/user.routes.js";
+import expenseRouter from "./Routes/expense.route.js";
+import { API_BASE_URI } from "./enum.js";
 
 const app = express();
 dotenv.config();
@@ -15,6 +17,6 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
-app.use("/api/auth", userRouter);
-
+app.use(`${API_BASE_URI.ROUTE}/auth`, userRouter);
+app.use(`${API_BASE_URI.ROUTE}/expense`, expenseRouter);
 export default app;

@@ -3,6 +3,32 @@ import bcrypt from "bcrypt";
 import User from "../Models/user.model.js";
 import cookieOptions from "../Utils/cookieOptions.js";
 
+export const getUserData = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.userId)
+      .select("_id userName email")
+      .lean();
+
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      user: {
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const registerUser = async (req, res, next) => {
   const { userName, email, password, confirmPassword } = req.body;
   if (!userName || !email || !password || !confirmPassword) {
