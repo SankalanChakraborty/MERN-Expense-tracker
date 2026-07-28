@@ -1,6 +1,6 @@
 const ExpenseType = {
   FOOD: "Food",
-  GROCERIES: "GROCERIES",
+  GROCERIES: "Groceries",
   TRANSPORT: "Transport",
   ENTERTAINMENT: "Entertainment",
   UTILITY_BILL: "Utility Bill",

@@ -6,6 +6,7 @@ import "../Styles/Login.css";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import WebInfo from "../Components/WebInfo";
+import { API_BASE_URI } from "../../constants.ts";
 
 interface RegisterUserProps {
   setToastMessage: (message: ToastProps) => void;
@@ -34,7 +35,7 @@ const RegisterUser = ({ setToastMessage }: RegisterUserProps) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/api/auth/register", {
+      const response = await fetch(`${API_BASE_URI}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

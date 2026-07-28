@@ -185,9 +185,9 @@ export const refreshToken = async (req, res, next) => {
 };
 
 export const userLogout = async (req, res, next) => {
-  const { id } = req.user;
+  const { userId } = req.user;
   try {
-    await User.findByIdAndUpdate(id, { refreshToken: null });
+    await User.findByIdAndUpdate(userId, { refreshToken: null });
 
     res.clearCookie("accessToken", { path: "/" });
     res.clearCookie("refreshToken", { path: "/" });

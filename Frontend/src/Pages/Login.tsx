@@ -7,6 +7,7 @@ import Input from "../Components/Input";
 import Button from "../Components/Button";
 import WebInfo from "../Components/WebInfo";
 import type { ToastProps } from "../Components/Toast";
+import { API_BASE_URI } from "../../constants";
 
 interface LoginProps {
   setToastMessage: (message: ToastProps) => void;
@@ -27,7 +28,7 @@ const Login = ({ setToastMessage, setLoggedinUser }: LoginProps) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+      const response = await fetch(`${API_BASE_URI}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,6 +38,13 @@ const Login = ({ setToastMessage, setLoggedinUser }: LoginProps) => {
       });
       const data = await response.json();
       console.log(data);
+      if (!response.ok) {
+        setToastMessage({
+          message: "Error while logging in. Please try again !",
+          severity: "error",
+        });
+        return;
+      }
       if (data.status === "success") {
         setToastMessage({ message: data.message, severity: "success" });
       }
@@ -44,10 +52,6 @@ const Login = ({ setToastMessage, setLoggedinUser }: LoginProps) => {
       navigateToDashboard();
     } catch (error) {
       console.error("Error during login:", error);
-      setToastMessage({
-        message: "An error occurred during login.",
-        severity: "error",
-      });
     }
   };
 
