@@ -1,0 +1,48 @@
+.chart-card {
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-elevated), var(--highlight-top);
+  animation: fade-slide-up 0.45s ease-out both;
+  animation-delay: 0.15s;
+}
+
+.chart-card h4 {
+  color: var(--color-text-primary);
+  font-size: 15px;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 18px;
+}
+
+.chart-card.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  text-align: center;
+}
+
+.chart-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--color-modal-surface-start);
+  border: 1px solid var(--color-white-12);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: var(--color-modal-shadow) 0 8px 20px;
+}
+
+.chart-tooltip-value {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.chart-tooltip-label {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}

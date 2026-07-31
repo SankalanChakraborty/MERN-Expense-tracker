@@ -1,0 +1,38 @@
+.loading-splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 100vh;
+  background: var(--color-page-bg-deep);
+}
+
+.loading-splash h3 {
+  font-size: 28px;
+  color: var(--color-text-primary);
+}
+
+.loading-splash .highlight {
+  color: var(--color-accent);
+}
+
+.loading-splash-pulse {
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  animation: loading-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes loading-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleX(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}

@@ -1,57 +1,34 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import type { User } from "../App";
 import "../Styles/Login.css";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import WebInfo from "../Components/WebInfo";
 import type { ToastProps } from "../Components/Toast";
-import { API_BASE_URI } from "../../constants";
+import { useAuth } from "../context/AuthContext";
+import { ApiError } from "../api/client";
 
 interface LoginProps {
   setToastMessage: (message: ToastProps) => void;
-  setLoggedinUser: (user: User | null) => void;
 }
 
-const Login = ({ setToastMessage, setLoggedinUser }: LoginProps) => {
+const Login = ({ setToastMessage }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  const navigateToDashboard = () => {
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1000);
-  };
+  const { login } = useAuth();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${API_BASE_URI}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-        setToastMessage({
-          message: "Error while logging in. Please try again !",
-          severity: "error",
-        });
-        return;
-      }
-      if (data.status === "success") {
-        setToastMessage({ message: data.message, severity: "success" });
-      }
-      setLoggedinUser(data.user);
-      navigateToDashboard();
+      await login(email, password);
+      setToastMessage({ message: "Login successful", severity: "success" });
     } catch (error) {
-      console.error("Error during login:", error);
+      const message =
+        error instanceof ApiError
+          ? error.message
+          : "Error while logging in. Please try again !";
+      setToastMessage({ message, severity: "error" });
     }
   };
 

@@ -38,7 +38,52 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  --shadow-card: 0 8px 24px rgba(2, 6, 23, 0.35);
+  --shadow-card-hover: 0 14px 32px rgba(2, 6, 23, 0.45);
+
+  /* --- Elevated surface system ---------------------------------------
+     Panels are a translucent wash over the page, not a flat fill: the
+     gradient + inset top highlight is what reads as "glass" rather than
+     a plain rectangle. Use surface-panel + border-hairline + shadow-elevated
+     together on any card. */
+  --surface-panel: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.055),
+    rgba(255, 255, 255, 0.014)
+  );
+  --surface-panel-hover: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.025)
+  );
+  --surface-sunken: rgba(2, 6, 23, 0.32);
+  --border-hairline: 1px solid rgba(255, 255, 255, 0.08);
+  --border-hairline-strong: 1px solid rgba(255, 255, 255, 0.14);
+  --highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --shadow-elevated: 0 18px 40px -18px rgba(2, 6, 23, 0.85);
+  --shadow-floating: 0 28px 60px -20px rgba(2, 6, 23, 0.95);
+  --shadow-accent-glow: 0 10px 30px -8px rgba(245, 158, 11, 0.45);
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --color-accent-bright: #fbbf24;
+  --color-danger-soft: rgba(239, 68, 68, 0.12);
+  --color-danger-border: rgba(239, 68, 68, 0.32);
+  --color-green-soft: rgba(16, 185, 129, 0.12);
 }
+
+/*
+  Responsive breakpoints — repeated as literal @media values per component
+  CSS file (CSS custom properties can't be used inside @media conditions):
+  1024px - tablet (sidebar rail, card grid collapses to 2 columns)
+  900px  - Login/Register two-panel layout stacks
+  640px  - mobile (sidebar becomes a bottom tab bar, card grid to 1 column,
+           expense table becomes stacked cards)
+  600px  - Login hides the marketing panel; Add Expense modal goes full-bleed
+*/
 
 * {
   margin: 0;
@@ -54,4 +99,81 @@ body,
 #root {
   background-color: #080e1e;
   min-height: 100vh;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.02em;
+}
+
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Shared page furniture -------------------------------------------
+   Every in-app page opens with the same header block so Dashboard,
+   Expenses, Budgets and Settings read as one product. */
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 4px;
+}
+
+.page-header .page-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 8px;
+}
+
+.page-header h2 {
+  font-size: 28px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1.15;
+}
+
+.page-header .page-subtitle {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.surface-card {
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated), var(--highlight-top);
+}
+
+@media (max-width: 640px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header h2 {
+    font-size: 23px;
+  }
 }

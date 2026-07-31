@@ -44,6 +44,13 @@ export const errorHandler = (err, req, res, next) => {
       });
   }
 
+  // Malformed ObjectId (e.g. an invalid expense id in a route param)
+  if (err.name === "CastError") {
+    return res
+      .status(400)
+      .json({ status: "error", message: "Invalid expense id" });
+  }
+
   // Duplicate key error (MongoDB)
   if (err.code === 11000) {
     const field = Object.keys(err.keyPattern)[0];

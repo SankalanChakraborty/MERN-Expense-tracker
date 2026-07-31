@@ -10,12 +10,14 @@ import {
   userLogout,
   refreshToken,
   getUserData,
+  updatePreferences,
 } from "../Controllers/user.controller.js";
 import { authenticateToken } from "../Middlewares/auth.middleware.js";
 
 const router = express.Router();
 
 router.get("/me", authenticateToken, getUserData);
+router.patch("/preferences", authenticateToken, updatePreferences);
 router.post("/register", registerLimiter, registerUser);
 router.post("/login", loginLimiter, userLogin);
 router.post("/logout", authenticateToken, userLogout);

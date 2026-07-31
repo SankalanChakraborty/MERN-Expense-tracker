@@ -2,11 +2,12 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../Models/user.model.js";
 import cookieOptions from "../Utils/cookieOptions.js";
+import { SUPPORTED_CURRENCIES } from "../enum.js";
 
 export const getUserData = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.userId)
-      .select("_id userName email")
+      .select("_id userName email currency")
       .lean();
 
     if (!user) {
@@ -22,6 +23,46 @@ export const getUserData = async (req, res, next) => {
         id: user._id,
         userName: user.userName,
         email: user.email,
+        currency: user.currency ?? "INR",
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updatePreferences = async (req, res, next) => {
+  try {
+    const { currency } = req.body;
+
+    if (!currency || !SUPPORTED_CURRENCIES.includes(currency)) {
+      return res
+        .status(400)
+        .json({ status: "error", message: "Unsupported currency" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.userId,
+      { currency },
+      { new: true, runValidators: true },
+    )
+      .select("_id userName email currency")
+      .lean();
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "error", message: "User not found" });
+    }
+
+    return res.json({
+      status: "success",
+      message: "Preferences updated",
+      user: {
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
+        currency: user.currency,
       },
     });
   } catch (error) {
@@ -138,6 +179,7 @@ export const userLogin = async (req, res, next) => {
         id: user._id,
         userName: user.userName,
         email: user.email,
+        currency: user.currency ?? "INR",
       },
     });
   } catch (error) {

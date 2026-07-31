@@ -1,28 +1,73 @@
-.dashboard-container {
-  display: flex;
+.expense-overview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
 
-.dashboard-details-container {
-  padding: 40px 20px;
+.expense-overview .overview-cards-container:nth-child(1) {
+  animation-delay: 0.03s;
+}
+.expense-overview .overview-cards-container:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.expense-overview .overview-cards-container:nth-child(3) {
+  animation-delay: 0.13s;
+}
+.expense-overview .overview-cards-container:nth-child(4) {
+  animation-delay: 0.18s;
 }
 
-.dashboard-details-container .dashboard-header {
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.recent-activity {
   display: flex;
-  justify-content: space-between;
-  padding: 20px 0;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.dashboard-header .welcome-message h3 {
-  font-size: 24px;
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-heading h3 {
+  font-size: 17px;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
-.dashboard-header .welcome-message span {
-  color: var(--color-text-secondary);
+.section-link {
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.18s ease;
 }
 
-.dashboard-details-container .expense-overview {
-  display: flex;
-  gap: 16px;
+.section-link:hover {
+  color: var(--color-accent-bright);
+  text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+  .expense-overview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .expense-overview {
+    grid-template-columns: 1fr;
+  }
 }

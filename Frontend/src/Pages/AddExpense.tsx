@@ -1,81 +1,71 @@
 import { useState } from "react";
 import Input from "../Components/Input";
 import "../Styles/AddExpense.css";
-import type { User } from "../App";
 import type { ToastProps } from "../Components/Toast";
+import type { Expense, ExpenseCategory } from "../types";
+import { useExpenses } from "../context/ExpenseContext";
+import { ApiError } from "../api/client";
+import { EXPENSE_CATEGORIES as categories } from "../constants/categories";
 
-const categories = [
-  "Food",
-  "Groceries",
-  "Transport",
-  "Utility Bill",
-  "Entertainment",
-  "Health",
-  "Rent",
-  "Lending",
-  "Other",
-];
+const todayIsoDate = () => new Date().toISOString().slice(0, 10);
 
 interface AddExpenseProps {
   setShowAddExpense: (state: boolean) => void;
-  loggedInUser: User | null;
-  setToastMessage: (messgae: ToastProps) => void;
+  setToastMessage: (message: ToastProps) => void;
+  expenseToEdit?: Expense | null;
 }
 
 const AddExpense = ({
   setShowAddExpense,
-  loggedInUser,
   setToastMessage,
+  expenseToEdit,
 }: AddExpenseProps) => {
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState(categories[0]);
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [note, setNote] = useState("");
-  const [recurring, setRecurring] = useState(false);
+  const { addExpense, editExpense } = useExpenses();
+  const isEditMode = Boolean(expenseToEdit);
+
+  const [amount, setAmount] = useState(
+    expenseToEdit ? String(expenseToEdit.amount) : "",
+  );
+  const [category, setCategory] = useState<ExpenseCategory>(
+    expenseToEdit?.category ?? categories[0],
+  );
+  const [date, setDate] = useState(
+    expenseToEdit ? expenseToEdit.date.slice(0, 10) : todayIsoDate(),
+  );
+  const [note, setNote] = useState(expenseToEdit?.note ?? "");
+  const [recurring, setRecurring] = useState(expenseToEdit?.recurring ?? false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const hideAddExpenseModal = () => {
     setShowAddExpense(false);
-  };
-
-  const resetForm = () => {
-    setAmount("");
-    setCategory(categories[0]);
-    setNote("");
-    setDate(new Date().toISOString().slice(0, 10));
   };
 
   const handleSaveNewExpense = async (
     event: React.FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
+    setIsSaving(true);
 
     try {
-      const response = await fetch("http://localhost:8080/api/v1/expense/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ amount, category, date, note, recurring }),
-      });
+      const payload = { amount: Number(amount), category, date, note, recurring };
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setToastMessage({
-          message: data.message ?? "Unable to add expense.",
-          severity: "error",
-        });
-        return;
+      if (isEditMode && expenseToEdit) {
+        await editExpense(expenseToEdit._id, payload);
+        setToastMessage({ message: "Expense updated", severity: "success" });
+      } else {
+        await addExpense(payload);
+        setToastMessage({ message: "New expense added", severity: "success" });
       }
 
-      console.log(data);
       setShowAddExpense(false);
-      resetForm();
     } catch (error) {
-      console.error("Error while adding new expense:", error);
-      setToastMessage({
-        message: "Unable to add expense. Please try again later.",
-        severity: "error",
-      });
+      const message =
+        error instanceof ApiError
+          ? error.message
+          : "Unable to save expense. Please try again later!";
+      setToastMessage({ message, severity: "error" });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -89,8 +79,10 @@ const AddExpense = ({
         <div className="add-expense-modal">
           <div className="add-expense-modal-header">
             <div>
-              <p className="add-expense-eyebrow">New entry</p>
-              <h2>Add expense</h2>
+              <p className="add-expense-eyebrow">
+                {isEditMode ? "Edit entry" : "New entry"}
+              </p>
+              <h2>{isEditMode ? "Edit expense" : "Add expense"}</h2>
             </div>
             <button
               type="button"
@@ -120,7 +112,9 @@ const AddExpense = ({
                 <select
                   id="category"
                   value={category}
-                  onChange={(event) => setCategory(event.target.value)}
+                  onChange={(event) =>
+                    setCategory(event.target.value as ExpenseCategory)
+                  }
                 >
                   {categories.map((option) => (
                     <option key={option} value={option}>
@@ -169,8 +163,12 @@ const AddExpense = ({
               >
                 Cancel
               </button>
-              <button type="submit" className="primary-btn">
-                Save expense
+              <button type="submit" className="primary-btn" disabled={isSaving}>
+                {isSaving
+                  ? "Saving..."
+                  : isEditMode
+                    ? "Save changes"
+                    : "Save expense"}
               </button>
             </div>
           </form>

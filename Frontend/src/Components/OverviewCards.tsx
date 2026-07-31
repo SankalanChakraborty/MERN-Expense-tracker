@@ -1,37 +1,45 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { faArrowTrendDown, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
 import "./OverviewCards.css";
+
+export type StatTone = "up" | "down" | "neutral";
 
 interface OverviewCardsProps {
   cardHeading: string;
+  /** Pre-formatted so the card never has to know about currency. */
+  value: string;
   status: string;
-  amount?: number;
-  numberOfTransactions?: number;
-  savingsPerentage?: number;
+  tone?: StatTone;
+  icon: IconDefinition;
 }
 
 const OverviewCards = ({
   cardHeading,
+  value,
   status,
-  amount,
-  numberOfTransactions,
-  savingsPerentage,
+  tone = "neutral",
+  icon,
 }: OverviewCardsProps) => {
   return (
     <div className="overview-cards-container">
-      <span className="card-heading">{cardHeading}</span>
-      {amount && <span className="card-amount">₹{amount}</span>}
-      {numberOfTransactions && (
-        <span className="number-of-transactions">{numberOfTransactions}</span>
-      )}
-      {savingsPerentage && (
-        <span className="savings-percentage">{savingsPerentage}%</span>
-      )}
-      {status && (
-        <span
-          className={`status ${status.includes("greater") ? "status-danger" : ""} ${status.includes("track") ? "status-green" : ""}`}
-        >
-          {status}
+      <div className="card-top">
+        <span className="card-heading">{cardHeading}</span>
+        <span className="card-icon">
+          <FontAwesomeIcon icon={icon} />
         </span>
-      )}
+      </div>
+
+      <span className="card-value">{value}</span>
+
+      <span className={`status status-${tone}`}>
+        {tone !== "neutral" && (
+          <FontAwesomeIcon
+            icon={tone === "up" ? faArrowTrendUp : faArrowTrendDown}
+          />
+        )}
+        {status}
+      </span>
     </div>
   );
 };

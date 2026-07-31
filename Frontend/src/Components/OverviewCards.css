@@ -1,36 +1,113 @@
 .overview-cards-container {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 200px;
+  gap: 14px;
   padding: 20px;
-  background-color: var(--color-page-bg);
-  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated), var(--highlight-top);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+  animation: fade-slide-up 0.4s ease-out both;
+}
+
+/* Accent bloom in the top-right corner, revealed on hover. */
+.overview-cards-container::after {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(245, 158, 11, 0.22),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+
+.overview-cards-container:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 158, 11, 0.28);
+  box-shadow: var(--shadow-floating), var(--highlight-top);
+}
+
+.overview-cards-container:hover::after {
+  opacity: 1;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .overview-cards-container .card-heading {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-text-secondary);
-  font-size: 14px;
 }
 
-.overview-cards-container .card-amount,
-.overview-cards-container .number-of-transactions,
-.overview-cards-container .savings-percentage {
-  font-size: 20px;
+.card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent-soft-border);
+  color: var(--color-accent);
+  font-size: 13px;
+}
+
+.overview-cards-container .card-value {
+  font-size: 30px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.05;
   color: var(--color-text-primary);
-  font-size: 24px;
-  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.03em;
+  /* Proportional figures: tabular-nums looks loose at display sizes. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status {
-  color: var(--color-text-secondary);
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--color-text-muted);
 }
 
-.status-danger {
-  color: var(--color-red);
+.status svg {
+  font-size: 11px;
 }
 
-.status-green {
-  color: var(--color-green);
+.status-up {
+  color: #fca5a5;
+}
+
+.status-down {
+  color: #6ee7b7;
+}
+
+@media (max-width: 640px) {
+  .overview-cards-container .card-value {
+    font-size: 26px;
+  }
 }

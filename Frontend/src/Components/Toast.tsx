@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleCheck,
   faCircleExclamation,
@@ -13,7 +14,7 @@ export interface ToastProps {
 }
 
 const Toast = ({ message, severity }: ToastProps) => {
-  const iconMap: Record<string, any> = {
+  const iconMap: Record<string, IconDefinition> = {
     success: faCircleCheck,
     error: faCircleExclamation,
     info: faCircleInfo,

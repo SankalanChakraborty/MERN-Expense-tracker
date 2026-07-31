@@ -1,0 +1,302 @@
+.budget-total-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated), var(--highlight-top);
+}
+
+.budget-total-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.budget-total-label {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.budget-total-value {
+  font-size: 28px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+}
+
+.budget-total-limit {
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+/* --- Form ------------------------------------------------------------ */
+
+.budget-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 16px;
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+  box-shadow: var(--highlight-top);
+}
+
+.budget-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.budget-form-field label {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+}
+
+.budget-form-field select,
+.budget-form-field input {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-input-border);
+  background: var(--surface-sunken);
+  color: var(--color-input-text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.budget-form-field select:focus,
+.budget-form-field input:focus {
+  border-color: var(--color-accent);
+}
+
+.budget-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-bright),
+    var(--color-accent-strong)
+  );
+  color: #1a1204;
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.budget-save-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-accent-glow);
+}
+
+.budget-save-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* --- Cards ----------------------------------------------------------- */
+
+.budget-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.budget-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated), var(--highlight-top);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+  animation: fade-slide-up 0.4s ease-out both;
+}
+
+.budget-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-white-12);
+}
+
+.budget-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.budget-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.budget-category .category-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.budget-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.budget-remove:hover {
+  color: var(--color-red);
+  border-color: var(--color-danger-border);
+  background: var(--color-danger-soft);
+}
+
+.budget-amounts {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.budget-spent {
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.budget-limit {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.budget-track {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.budget-track-lg {
+  height: 10px;
+}
+
+.budget-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fill-ok {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.fill-warn {
+  background: linear-gradient(90deg, var(--color-accent-strong), var(--color-accent-bright));
+}
+
+.fill-over {
+  background: linear-gradient(90deg, #dc2626, #f87171);
+}
+
+.budget-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12.5px;
+}
+
+.budget-percent {
+  font-weight: var(--font-weight-semibold);
+}
+
+.state-ok {
+  color: #6ee7b7;
+}
+
+.state-warn {
+  color: var(--color-accent);
+}
+
+.state-over {
+  color: #fca5a5;
+}
+
+.budget-remaining {
+  color: var(--color-text-secondary);
+}
+
+.budget-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 180px;
+  padding: 32px 20px;
+  text-align: center;
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--highlight-top);
+  color: var(--color-text-muted);
+}
+
+.budget-empty p {
+  font-size: 16px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.budget-empty span {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 640px) {
+  .budget-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .budget-save-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .budget-grid {
+    grid-template-columns: 1fr;
+  }
+}

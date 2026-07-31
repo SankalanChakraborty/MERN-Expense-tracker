@@ -221,3 +221,27 @@
   font-size: 12px;
   width: 70px;
 }
+
+@media (max-width: 900px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .login-container .login-form,
+  .login-container .web-info {
+    width: 100%;
+    padding: 32px 24px;
+  }
+
+  .web-info h1 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .login-container .web-info {
+    display: none;
+  }
+}

@@ -1,56 +1,306 @@
 .dashboard-menu {
   display: flex;
   flex-direction: column;
-  padding: 20px 40px;
-  width: 25%;
+  padding: 28px 20px 24px;
+  width: 252px;
+  flex-shrink: 0;
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.012)
+  );
+  border-right: var(--border-hairline);
+  position: sticky;
+  top: 0;
   height: 100vh;
-  background-color: var(--color-page-bg);
-}
-
-.menu-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.menu-container .menu-item {
-  display: flex;
-  gap: 16px;
-  cursor: pointer;
-  padding: 10px;
-  transition: all 0.3s ease-in-out;
 }
 
 .header {
-  margin-bottom: 20px;
+  padding: 0 10px;
+  margin-bottom: 28px;
 }
 
 .header h3 {
+  font-size: 21px;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
-}
-
-.menu-item svg,
-.menu-item span {
-  color: var(--color-text-secondary);
 }
 
 .highlight {
   color: var(--color-accent);
 }
 
-.menu-container .menu-item:hover {
-  background-color: var(--color-accent-hover-border);
-  border-radius: 10px;
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.menu-container .menu-item:hover svg,
-.menu-container .menu-item:hover span,
-.menu-container .menu-item.active svg,
-.menu-container .menu-item.active span {
-  color: var(--color-accent);
+.menu-container .menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.menu-item .menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.menu-container .menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.045);
+  color: var(--color-text-primary);
+}
+
+.menu-container .menu-item:hover .menu-icon {
+  color: var(--color-text-primary);
 }
 
 .menu-container .menu-item.active {
-  background-color: var(--color-accent-hover-border);
-  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(245, 158, 11, 0.16),
+    rgba(245, 158, 11, 0.03)
+  );
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Left rail marker — the primary "you are here" signal. */
+.menu-container .menu-item.active::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 22px;
+  border-radius: 0 3px 3px 0;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+}
+
+.menu-container .menu-item.active .menu-icon {
+  background: var(--color-accent);
+  color: #1a1204;
+}
+
+.menu-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  box-shadow: var(--highlight-top);
+}
+
+.user-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-bright),
+    var(--color-accent-strong)
+  );
+  color: #1a1204;
+  font-weight: var(--font-weight-bold);
+  font-size: 14px;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-danger-border);
+  background: var(--color-danger-soft);
+  color: #fca5a5;
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.logout-button:hover {
+  background: var(--color-red);
+  border-color: var(--color-red);
+  color: #ffffff;
+  box-shadow: 0 8px 20px -8px rgba(239, 68, 68, 0.7);
+}
+
+@media (max-width: 1024px) {
+  .dashboard-menu {
+    width: 78px;
+    padding: 24px 12px 20px;
+    align-items: center;
+  }
+
+  .header {
+    padding: 0;
+    margin-bottom: 22px;
+  }
+
+  /* Collapse the wordmark to just the accent "Ex" monogram. */
+  .header h3 {
+    font-size: 0;
+  }
+
+  .header h3 .highlight {
+    font-size: 20px;
+  }
+
+  .menu-container {
+    width: 100%;
+    align-items: center;
+  }
+
+  .menu-container .menu-item {
+    justify-content: center;
+    padding: 10px 0;
+    width: 100%;
+  }
+
+  .menu-label {
+    display: none;
+  }
+
+  .menu-container .menu-item.active::before {
+    left: -12px;
+  }
+
+  .user-card {
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .user-meta {
+    display: none;
+  }
+
+  .logout-button {
+    padding: 10px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    border-right: none;
+    border-top: var(--border-hairline-strong);
+    background: rgba(10, 16, 32, 0.92);
+    backdrop-filter: blur(14px);
+    z-index: 900;
+  }
+
+  .header {
+    display: none;
+  }
+
+  .menu-container {
+    flex-direction: row;
+    flex: 1;
+    gap: 2px;
+    justify-content: space-around;
+  }
+
+  .menu-container .menu-item {
+    padding: 6px 0;
+  }
+
+  /* A bottom bar has no left edge to hang the rail marker on. */
+  .menu-container .menu-item.active::before {
+    display: none;
+  }
+
+  .menu-footer {
+    margin-top: 0;
+    padding-top: 0;
+    flex-direction: row;
+    flex-shrink: 0;
+  }
+
+  .user-card {
+    display: none;
+  }
+
+  .logout-button {
+    width: auto;
+    padding: 9px 12px;
+  }
 }

@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(chromium-cli --help)",
+      "Bash(npx --yes playwright --version)",
+      "Bash(npx --yes playwright install chromium --with-deps)",
+      "Bash(node /private/tmp/claude-501/-Users-sankalan-Documents-Projects-MERN-Expense-tracker/76e2dc53-f587-4c05-9cd1-803f383d40e7/scratchpad/drive.mjs)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Read(//tmp/**)",
+      "Bash(npx playwright *)",
+      "Bash(node drive.mjs)",
+      "Bash(node -e ' *)",
+      "Bash(node drive2.mjs)",
+      "Bash(node drive3.mjs)",
+      "Bash(node --check Controllers/budget.controller.js)",
+      "Bash(node --check Controllers/user.controller.js)",
+      "Bash(node --check Models/budget.model.js)",
+      "Bash(node --check Routes/budget.route.js)",
+      "Bash(node --check app.js)",
+      "Bash(lsof -ti:5173 -sTCP:LISTEN)",
+      "Bash(xargs kill)"
+    ]
+  }
+}

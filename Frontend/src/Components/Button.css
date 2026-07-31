@@ -32,24 +32,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid var(--color-accent-soft-border);
-  color: var(--color-text-primary);
+  flex-shrink: 0;
+  border: none;
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
+  color: #1a1204;
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
   background: linear-gradient(
     135deg,
-    rgba(245, 158, 11, 0.12),
-    rgba(245, 158, 11, 0.04)
+    var(--color-accent-bright),
+    var(--color-accent-strong)
   );
-  transition: all 0.25s ease-in-out;
+  box-shadow: 0 8px 22px -10px rgba(245, 158, 11, 0.8);
+  transition: all 0.22s ease-in-out;
 }
 
 .add-expense:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(245, 158, 11, 0.22),
-    rgba(245, 158, 11, 0.1)
-  );
-  border-color: var(--color-accent);
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent-glow);
 }

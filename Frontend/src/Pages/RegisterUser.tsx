@@ -6,7 +6,8 @@ import "../Styles/Login.css";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import WebInfo from "../Components/WebInfo";
-import { API_BASE_URI } from "../../constants.ts";
+import { register } from "../api/auth";
+import { ApiError } from "../api/client";
 
 interface RegisterUserProps {
   setToastMessage: (message: ToastProps) => void;
@@ -35,30 +36,17 @@ const RegisterUser = ({ setToastMessage }: RegisterUserProps) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${API_BASE_URI}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ userName, email, password, confirmPassword }),
-      });
-      const data = await response.json();
-      console.log(data);
-      if (data.status === "success") {
-        setToastMessage({ message: data.message, severity: "success" });
-        navigateToLogin();
-      } else {
-        setToastMessage({ message: data.message, severity: "error" });
-      }
+      const data = await register(userName, email, password, confirmPassword);
+      setToastMessage({ message: data.message, severity: "success" });
+      clearForm();
+      navigateToLogin();
     } catch (error) {
-      console.error("Error during registration:", error);
-      setToastMessage({
-        message: "An error occurred during registration.",
-        severity: "error",
-      });
+      const message =
+        error instanceof ApiError
+          ? error.message
+          : "An error occurred during registration.";
+      setToastMessage({ message, severity: "error" });
     }
-    clearForm();
   };
 
   return (

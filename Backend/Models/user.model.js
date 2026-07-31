@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { SUPPORTED_CURRENCIES } from "../enum.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -19,6 +20,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 8,
+    },
+    currency: {
+      type: String,
+      trim: true,
+      uppercase: true,
+      enum: SUPPORTED_CURRENCIES,
+      default: "INR",
     },
     refreshToken: {
       type: String,

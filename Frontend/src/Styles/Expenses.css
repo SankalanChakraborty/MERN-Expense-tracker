@@ -1,0 +1,116 @@
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  background: var(--surface-panel);
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+  box-shadow: var(--highlight-top);
+}
+
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.search-field svg {
+  position: absolute;
+  left: 13px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.search-field input {
+  width: 100%;
+  padding: 10px 12px 10px 34px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-input-border);
+  background: var(--surface-sunken);
+  color: var(--color-input-text);
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.search-field input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.search-field input:focus {
+  border-color: var(--color-accent);
+  background: rgba(2, 6, 23, 0.5);
+}
+
+.filter-bar select {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-input-border);
+  background: var(--surface-sunken);
+  color: var(--color-input-text);
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.filter-bar select:hover,
+.filter-bar select:focus {
+  border-color: var(--color-accent-soft-border);
+}
+
+.clear-filters {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-input-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.clear-filters:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-white-12);
+  background: var(--color-white-4);
+}
+
+.filter-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.filter-summary strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.filter-summary-total strong {
+  color: var(--color-accent);
+}
+
+@media (max-width: 640px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-bar select,
+  .clear-filters {
+    width: 100%;
+  }
+}
