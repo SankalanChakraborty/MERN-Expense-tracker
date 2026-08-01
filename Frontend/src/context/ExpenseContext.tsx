@@ -21,20 +21,24 @@ const ExpenseContext = createContext<ExpenseContextValue | null>(null);
 
 export const ExpenseProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
+  // Key off the id, not the user object: AuthContext hands back a fresh object
+  // on every profile write (e.g. changing currency), which would otherwise
+  // refetch the whole list for a change that has nothing to do with expenses.
+  const userId = user?.id ?? null;
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadedForUserId, setLoadedForUserId] = useState<string | null>(null);
 
   // Reset state during render (not in an effect) when the signed-in user
   // changes, so no stale expense list is briefly visible across accounts.
-  if (!user && loadedForUserId !== null) {
+  if (!userId && loadedForUserId !== null) {
     setLoadedForUserId(null);
     setExpenses([]);
     setIsLoading(false);
   }
 
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
 
     let cancelled = false;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- flips the loading flag before the fetch it gates kicks off
@@ -44,7 +48,7 @@ export const ExpenseProvider = ({ children }: { children: ReactNode }) => {
       .then((data) => {
         if (cancelled) return;
         setExpenses(data.expenses);
-        setLoadedForUserId(user.id);
+        setLoadedForUserId(userId);
       })
       .finally(() => {
         if (!cancelled) setIsLoading(false);
@@ -53,7 +57,7 @@ export const ExpenseProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, [userId]);
 
   const addExpense = async (input: ExpenseInput) => {
     const data = await expensesApi.createExpense(input);

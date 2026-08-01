@@ -21,7 +21,9 @@
       "Bash(node --check Routes/budget.route.js)",
       "Bash(node --check app.js)",
       "Bash(lsof -ti:5173 -sTCP:LISTEN)",
-      "Bash(xargs kill)"
+      "Bash(xargs kill)",
+      "Bash(node drive4.mjs)",
+      "Bash(node --check Middlewares/auth.middleware.js)"
     ]
   }
 }

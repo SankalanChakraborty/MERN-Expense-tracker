@@ -3,9 +3,14 @@ import jwt from "jsonwebtoken";
 export const authenticateToken = (req, res, next) => {
   const accessToken = req.cookies?.accessToken;
   if (!accessToken) {
-    return res
-      .status(401)
-      .json({ status: "error", message: "Access token is missing" });
+    // The access cookie carries the token's own 15m maxAge, so the browser
+    // usually drops it before the JWT can be seen as expired — this, not
+    // TOKEN_EXPIRED, is the normal "needs a refresh" case.
+    return res.status(401).json({
+      status: "error",
+      message: "Access token is missing",
+      code: "TOKEN_MISSING",
+    });
   }
   try {
     const decoded = jwt.verify(

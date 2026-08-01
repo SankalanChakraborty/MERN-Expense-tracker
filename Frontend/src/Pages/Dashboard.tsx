@@ -14,13 +14,14 @@ import AddExpense from "./AddExpense";
 import ExpenseTable from "../Components/ExpenseTable";
 import CategoryBreakdownChart from "../Components/CategoryBreakdownChart";
 import SpendingTrendChart from "../Components/SpendingTrendChart";
+import ConfirmDialog from "../Components/ConfirmDialog";
 import type { ToastProps } from "../Components/Toast";
 import type { Expense } from "../types";
 import { useAuth } from "../context/AuthContext";
 import { useExpenses } from "../context/ExpenseContext";
 import { useCurrency } from "../hooks/useCurrency";
+import { useExpenseDelete } from "../hooks/useExpenseDelete";
 import { formatCurrency } from "../utils/currency";
-import { ApiError } from "../api/client";
 
 interface DashboardProps {
   setToastMessage: (message: ToastProps) => void;
@@ -39,7 +40,8 @@ const isSameMonth = (isoDate: string, reference: Date) => {
 const Dashboard = ({ setToastMessage }: DashboardProps) => {
   const { user } = useAuth();
   const currency = useCurrency();
-  const { expenses, isLoading, removeExpense } = useExpenses();
+  const { expenses, isLoading } = useExpenses();
+  const { requestDelete, dialogProps } = useExpenseDelete(setToastMessage);
   const [showAddExpense, setShowAddExpense] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
 
@@ -114,18 +116,6 @@ const Dashboard = ({ setToastMessage }: DashboardProps) => {
     setShowAddExpense(true);
   };
 
-  const handleDeleteExpense = async (id: string) => {
-    if (!window.confirm("Delete this expense?")) return;
-    try {
-      await removeExpense(id);
-      setToastMessage({ message: "Expense deleted", severity: "success" });
-    } catch (error) {
-      const message =
-        error instanceof ApiError ? error.message : "Unable to delete expense.";
-      setToastMessage({ message, severity: "error" });
-    }
-  };
-
   return (
     <>
       <div className="page-header">
@@ -193,7 +183,7 @@ const Dashboard = ({ setToastMessage }: DashboardProps) => {
           expenses={recentExpenses}
           isLoading={isLoading}
           onEdit={handleEditExpense}
-          onDelete={handleDeleteExpense}
+          onDelete={requestDelete}
           onAddFirst={handleAddExpense}
         />
       </section>
@@ -205,6 +195,8 @@ const Dashboard = ({ setToastMessage }: DashboardProps) => {
           expenseToEdit={editingExpense}
         />
       )}
+
+      <ConfirmDialog {...dialogProps} />
     </>
   );
 };

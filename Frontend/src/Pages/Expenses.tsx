@@ -4,12 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../Components/Button";
 import ExpenseTable from "../Components/ExpenseTable";
 import AddExpense from "./AddExpense";
+import ConfirmDialog from "../Components/ConfirmDialog";
 import type { ToastProps } from "../Components/Toast";
 import type { Expense, ExpenseCategory } from "../types";
 import { useExpenses } from "../context/ExpenseContext";
 import { useCurrency } from "../hooks/useCurrency";
+import { useExpenseDelete } from "../hooks/useExpenseDelete";
 import { formatCurrency } from "../utils/currency";
-import { ApiError } from "../api/client";
 import { EXPENSE_CATEGORIES } from "../constants/categories";
 import "../Styles/Expenses.css";
 
@@ -34,8 +35,9 @@ const monthKeyOf = (isoDate: string) => {
 };
 
 const Expenses = ({ setToastMessage }: ExpensesProps) => {
-  const { expenses, isLoading, removeExpense } = useExpenses();
+  const { expenses, isLoading } = useExpenses();
   const currency = useCurrency();
+  const { requestDelete, dialogProps } = useExpenseDelete(setToastMessage);
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<ExpenseCategory | typeof ALL>(ALL);
@@ -79,18 +81,6 @@ const Expenses = ({ setToastMessage }: ExpensesProps) => {
   const handleEditExpense = (expense: Expense) => {
     setEditingExpense(expense);
     setShowAddExpense(true);
-  };
-
-  const handleDeleteExpense = async (id: string) => {
-    if (!window.confirm("Delete this expense?")) return;
-    try {
-      await removeExpense(id);
-      setToastMessage({ message: "Expense deleted", severity: "success" });
-    } catch (error) {
-      const message =
-        error instanceof ApiError ? error.message : "Unable to delete expense.";
-      setToastMessage({ message, severity: "error" });
-    }
   };
 
   return (
@@ -175,7 +165,7 @@ const Expenses = ({ setToastMessage }: ExpensesProps) => {
         expenses={filtered}
         isLoading={isLoading}
         onEdit={handleEditExpense}
-        onDelete={handleDeleteExpense}
+        onDelete={requestDelete}
         onAddFirst={handleAddExpense}
         emptyMessage={
           hasFilters ? "No expenses match these filters." : undefined
@@ -189,6 +179,8 @@ const Expenses = ({ setToastMessage }: ExpensesProps) => {
           expenseToEdit={editingExpense}
         />
       )}
+
+      <ConfirmDialog {...dialogProps} />
     </>
   );
 };

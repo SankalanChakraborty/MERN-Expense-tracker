@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCheck } from "@fortawesome/free-solid-svg-icons";
+import ConfirmDialog from "../Components/ConfirmDialog";
 import type { ToastProps } from "../Components/Toast";
-import type { ExpenseCategory } from "../types";
+import type { Budget, ExpenseCategory } from "../types";
 import { useExpenses } from "../context/ExpenseContext";
 import { useBudgets } from "../context/BudgetContext";
 import { useCurrency } from "../hooks/useCurrency";
@@ -33,6 +34,8 @@ const Budgets = ({ setToastMessage }: BudgetsProps) => {
   );
   const [amount, setAmount] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [pendingRemoval, setPendingRemoval] = useState<Budget | null>(null);
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const now = useMemo(() => new Date(), []);
 
@@ -105,15 +108,20 @@ const Budgets = ({ setToastMessage }: BudgetsProps) => {
     }
   };
 
-  const handleRemove = async (id: string, categoryName: string) => {
-    if (!window.confirm(`Remove the ${categoryName} budget?`)) return;
+  const handleRemove = async () => {
+    if (!pendingRemoval) return;
+
+    setIsRemoving(true);
     try {
-      await removeBudget(id);
+      await removeBudget(pendingRemoval._id);
       setToastMessage({ message: "Budget removed", severity: "success" });
+      setPendingRemoval(null);
     } catch (error) {
       const message =
         error instanceof ApiError ? error.message : "Unable to remove budget.";
       setToastMessage({ message, severity: "error" });
+    } finally {
+      setIsRemoving(false);
     }
   };
 
@@ -222,7 +230,7 @@ const Budgets = ({ setToastMessage }: BudgetsProps) => {
                   type="button"
                   className="budget-remove"
                   aria-label={`Remove ${row.category} budget`}
-                  onClick={() => handleRemove(row._id, row.category)}
+                  onClick={() => setPendingRemoval(row)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
@@ -258,6 +266,21 @@ const Budgets = ({ setToastMessage }: BudgetsProps) => {
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={pendingRemoval !== null}
+        title="Remove this budget?"
+        message={
+          pendingRemoval
+            ? `The ${pendingRemoval.category} monthly limit of ${formatCurrency(pendingRemoval.amount, currency)} will be removed. Your expenses are not affected.`
+            : ""
+        }
+        confirmLabel="Remove"
+        tone="danger"
+        isBusy={isRemoving}
+        onConfirm={handleRemove}
+        onCancel={() => !isRemoving && setPendingRemoval(null)}
+      />
     </>
   );
 };

@@ -20,20 +20,22 @@ const BudgetContext = createContext<BudgetContextValue | null>(null);
 
 export const BudgetProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
+  // Key off the id, not the user object — see the note in ExpenseContext.
+  const userId = user?.id ?? null;
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadedForUserId, setLoadedForUserId] = useState<string | null>(null);
 
   // Clear during render (not in an effect) when the session ends, so one
   // account's budgets are never briefly visible to the next.
-  if (!user && loadedForUserId !== null) {
+  if (!userId && loadedForUserId !== null) {
     setLoadedForUserId(null);
     setBudgets([]);
     setIsLoading(false);
   }
 
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
 
     let cancelled = false;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- flips the loading flag before the fetch it gates kicks off
@@ -43,7 +45,7 @@ export const BudgetProvider = ({ children }: { children: ReactNode }) => {
       .then((data) => {
         if (cancelled) return;
         setBudgets(data.budgets);
-        setLoadedForUserId(user.id);
+        setLoadedForUserId(userId);
       })
       .finally(() => {
         if (!cancelled) setIsLoading(false);
@@ -52,7 +54,7 @@ export const BudgetProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, [userId]);
 
   const saveBudget = async (category: ExpenseCategory, amount: number) => {
     const data = await budgetsApi.setBudget(category, amount);

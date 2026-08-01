@@ -10,7 +10,7 @@ interface ExpenseTableProps {
   expenses: Expense[];
   isLoading: boolean;
   onEdit: (expense: Expense) => void;
-  onDelete: (id: string) => void;
+  onDelete: (expense: Expense) => void;
   onAddFirst: () => void;
   /** Overrides the first-run empty state, e.g. when filters exclude everything. */
   emptyMessage?: string;
@@ -111,7 +111,7 @@ const ExpenseTable = ({
                   type="button"
                   className="row-action-btn row-action-danger"
                   aria-label="Delete expense"
-                  onClick={() => onDelete(expense._id)}
+                  onClick={() => onDelete(expense)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
