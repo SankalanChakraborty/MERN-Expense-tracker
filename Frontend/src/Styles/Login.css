@@ -240,8 +240,111 @@
   }
 }
 
+/* --- Mobile ----------------------------------------------------------
+   Don't hide the brand panel outright — that leaves a bare form floating in
+   a void. Keep the pill + headline, drop the heavy marketing furniture
+   (sub-copy, feature row, sample chart), and card the form. */
 @media (max-width: 600px) {
+  .login-container {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    padding: 28px 18px 36px;
+    overflow: hidden;
+    background: var(--color-page-bg-deep);
+  }
+
+  /* Decorative only: sits behind the panels (z-index 0 vs 1), never able to
+     obscure the form even if the animation misbehaves. */
+  .login-container::before {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        circle at 18% 12%,
+        rgba(245, 158, 11, 0.26),
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 88% 30%,
+        rgba(59, 130, 246, 0.18),
+        transparent 44%
+      ),
+      radial-gradient(
+        circle at 50% 92%,
+        rgba(139, 92, 246, 0.16),
+        transparent 46%
+      );
+    animation: aurora-drift 14s ease-in-out infinite alternate;
+  }
+
+  .login-container .web-info,
+  .login-container .login-form {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    height: auto;
+    width: 100%;
+  }
+
   .login-container .web-info {
+    display: flex;
+    gap: 14px;
+    padding: 0 4px 24px;
+  }
+
+  .web-info .sub-info,
+  .web-info .more-info,
+  .web-info .sample-chart-data-adv,
+  .web-info .expense-legends {
     display: none;
+  }
+
+  .web-info .pill-info {
+    font-size: 10.5px;
+    padding: 6px 12px;
+  }
+
+  .web-info h1 {
+    font-size: 31px;
+    line-height: 1.16;
+  }
+
+  .login-container .login-form {
+    gap: 18px;
+    padding: 26px 20px 28px;
+    background: linear-gradient(
+      158deg,
+      rgba(26, 39, 68, 0.72),
+      rgba(10, 16, 32, 0.72)
+    );
+    backdrop-filter: blur(16px);
+    border: var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-floating), var(--highlight-top);
+  }
+
+  /* Sunken inputs read as recessed against the raised card. */
+  .login-form .input-field {
+    background: var(--surface-sunken);
+    padding: 13px 14px;
+  }
+}
+
+@keyframes aurora-drift {
+  from {
+    transform: translate3d(-3%, -2%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-container::before {
+    animation: none;
   }
 }

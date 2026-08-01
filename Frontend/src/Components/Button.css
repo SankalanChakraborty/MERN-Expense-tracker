@@ -12,20 +12,33 @@
   cursor: pointer;
 }
 
+/* Primary CTA on the auth pages — matches "Add Expense" so the most important
+   action on the page never reads as a disabled outline button. */
 .auth-button {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #080e1e;
-  color: #ffffff;
-  font-size: 14px;
-  border: 1px solid var(--color-text-secondary);
-  transition: all 0.3s ease-in-out;
+  padding: 13px 20px;
+  border: none;
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-bright),
+    var(--color-accent-strong)
+  );
+  color: #1a1204;
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+  box-shadow: 0 10px 24px -10px rgba(245, 158, 11, 0.85);
+  transition: all 0.22s ease-in-out;
 }
 
 .auth-button:hover {
-  color: #ffffff;
-  border: 1px solid var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent-glow);
+}
+
+.auth-button:active {
+  transform: translateY(0);
 }
 
 .add-expense {
