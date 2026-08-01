@@ -223,7 +223,11 @@
 }
 
 .fill-warn {
-  background: linear-gradient(90deg, var(--color-accent-strong), var(--color-accent-bright));
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-strong),
+    var(--color-accent-bright)
+  );
 }
 
 .fill-over {
@@ -298,5 +302,11 @@
 
   .budget-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .budget-form-field {
+    flex: 1 1 100%;
   }
 }

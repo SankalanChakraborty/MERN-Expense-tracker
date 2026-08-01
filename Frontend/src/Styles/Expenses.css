@@ -103,6 +103,12 @@
   color: var(--color-accent);
 }
 
+@media (max-width: 768px) {
+  .search-field {
+    flex: 1 1 100%;
+  }
+}
+
 @media (max-width: 640px) {
   .filter-bar {
     flex-direction: column;
