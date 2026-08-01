@@ -201,7 +201,10 @@ export const refreshToken = async (req, res, next) => {
       refreshToken,
       process.env.JWT_SECRET_REFRESH_TOKEN,
     );
-    const user = await User.findById(decoded.userId);
+    // `refreshToken` is `select: false` on the schema, so it must be asked for
+    // explicitly — without this the field comes back undefined and the
+    // comparison below rejects every refresh.
+    const user = await User.findById(decoded.userId).select("+refreshToken");
     if (!user || user.refreshToken !== refreshToken) {
       return res
         .status(403)
