@@ -7,7 +7,10 @@ services:
     runtime: node
     plan: free
     rootDir: Backend
-    buildCommand: npm install
+    # `ci` installs exactly the lockfile (reproducible); `--omit=dev` keeps
+    # mongodb-memory-server off the box — it downloads a full MongoDB binary at
+    # install time, which would blow the free tier's build time and disk.
+    buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /api/v1/health
     envVars:
