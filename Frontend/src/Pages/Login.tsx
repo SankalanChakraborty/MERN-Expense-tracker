@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import "../Styles/Login.css";
 import Input from "../Components/Input";
@@ -17,6 +17,7 @@ const Login = ({ setToastMessage }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,6 +25,17 @@ const Login = ({ setToastMessage }: LoginProps) => {
       await login(email, password);
       setToastMessage({ message: "Login successful", severity: "success" });
     } catch (error) {
+      // Credentials were right but the address was never confirmed — take them
+      // to the code screen instead of showing a dead end.
+      if (
+        error instanceof ApiError &&
+        (error.payload as { code?: string })?.code === "EMAIL_NOT_VERIFIED"
+      ) {
+        setToastMessage({ message: error.message, severity: "info" });
+        navigate("/verify-email", { state: { email } });
+        return;
+      }
+
       const message =
         error instanceof ApiError
           ? error.message

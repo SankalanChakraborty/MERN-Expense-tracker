@@ -7,18 +7,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   className?: string;
   icon?: IconProp;
-  onclick?: () => void;
 }
 
 const Button = ({
   type = "button",
-  onClick,
   children,
   className = "",
   icon,
+  ...rest
 }: ButtonProps) => {
   return (
-    <button type={type} onClick={onClick} className={`button ${className}`}>
+    // `rest` forwards disabled, aria-*, form, etc. — without it those props are
+    // accepted by the type but silently dropped.
+    <button type={type} className={`button ${className}`} {...rest}>
       {icon && <FontAwesomeIcon icon={icon} />}
       {children}
     </button>

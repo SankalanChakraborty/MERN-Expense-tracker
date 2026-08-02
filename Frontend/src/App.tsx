@@ -2,6 +2,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import RegisterUser from "./Pages/RegisterUser";
 import Login from "./Pages/Login";
+import VerifyEmail from "./Pages/VerifyEmail";
 import Dashboard from "./Pages/Dashboard";
 import Expenses from "./Pages/Expenses";
 import Budgets from "./Pages/Budgets";
@@ -53,6 +54,14 @@ function App() {
             element={
               <PublicOnlyRoute>
                 <Login setToastMessage={setToastMessage} />
+              </PublicOnlyRoute>
+            }
+          />
+          <Route
+            path="/verify-email"
+            element={
+              <PublicOnlyRoute>
+                <VerifyEmail setToastMessage={setToastMessage} />
               </PublicOnlyRoute>
             }
           />

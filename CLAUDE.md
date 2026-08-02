@@ -9,10 +9,10 @@ MERN expense tracker ("Expensely"). Two independent apps in one repo with no sha
 ## Commands
 
 **Backend** (run from `Backend/`):
-- `npm start` — runs `nodemon server.js` (connects to Mongo, then listens on `process.env.PORT`)
-- No test suite is configured (`npm test` is a stub that exits 1)
+- `npm run dev` — nodemon with reload. `npm start` is `node server.js` (production; do not change it back to nodemon)
+- `npm run test:integration` — full auth/expense/budget suite against a throwaway in-memory MongoDB. No config or network needed; run this after touching auth
 - No lint script configured
-- Requires a `.env` with `PORT`, `MONGO_URI`, `JWT_SECRET_ACCESS_TOKEN`, `JWT_SECRET_REFRESH_TOKEN`
+- Copy `.env.example` → `.env`. `server.js` exits at boot if `MONGO_URI` or either JWT secret is missing
 
 **Frontend** (run from `Frontend/`):
 - `npm run dev` — Vite dev server (defaults to port 5173, which the backend's CORS config hardcodes as the allowed origin)
@@ -35,9 +35,13 @@ Standard Routes → Controllers → Models layering:
 - Budgets are standing monthly caps, one per (user, category), enforced by a unique compound index; `setBudget` upserts on that pair rather than creating duplicates. There is no per-month budget record — "this month's spend" is computed on the frontend by filtering expenses.
 - Ownership checks on `expense`/`budget` edit+delete return **404** (not 403) when the document belongs to another user, so a non-owner can't distinguish "missing" from "not yours".
 
-**Auth flow**: login issues both an access token (15m) and refresh token (7d) as httpOnly cookies (`Utils/cookieOptions.js`); the refresh token is also persisted on the `User` document so it can be invalidated (logout sets it to `null`, and `/auth/refresh` checks the cookie value against the stored one before issuing a new access token). `authenticateToken` middleware reads the `accessToken` cookie and returns `401` with `code: "TOKEN_EXPIRED"` specifically when the JWT is expired (vs `403` for any other invalid-token case) — that code is meant to be the client's signal to call `/auth/refresh`. Rate limiting on login/register/refresh lives in `Middlewares/rate.limiter.js` and is skipped in `NODE_ENV=development`.
+**Auth flow**: registration creates an **unverified** user and emails a 6-digit OTP (`Utils/mailer.js`, `Utils/otp.js`); `/auth/login` returns `403` + `code: "EMAIL_NOT_VERIFIED"` until `/auth/verify-otp` succeeds. OTPs are bcrypt-hashed, expire in 10 minutes, and allow 5 attempts. Login then issues an access token (15m) and refresh token (7d) as httpOnly cookies (`Utils/cookieOptions.js`); the refresh token is persisted on the `User` doc so logout can revoke it.
 
-CORS in `app.js` is hardcoded to `http://localhost:5173` with `credentials: true` — update this if the frontend's dev origin or deployed origin changes.
+> **`select: false` is a recurring trap in `user.model.js`.** `password`, `refreshToken`, `otpHash`, `otpExpiresAt` and `otpAttempts` are all hidden by default, so any query that *reads* them must opt in with `.select("+field")`. Forgetting this doesn't error — the field is silently `undefined` and the comparison fails. That exact bug made `/auth/refresh` return 403 for every request.
+
+Rate limiting lives in `Middlewares/rate.limiter.js` and is skipped in `NODE_ENV=development`.
+
+**Deployment** (see `DEPLOYMENT.md`): Vercel serves the frontend and rewrites `/api/*` to Render, so the browser sees one origin and the auth cookies stay first-party — this is deliberate, since split domains would make them third-party and Safari/Brave/Firefox would block login. `app.js` therefore needs no CORS for normal traffic; `CLIENT_ORIGINS` is only a safety net for direct API access. `TRUST_PROXY` controls client-IP resolution behind those two proxy hops — get it wrong and the rate limiters either key every visitor together or become spoofable. `GET /api/v1/health` echoes the resolved IP for checking.
 
 ### Frontend (React 19 + TypeScript + Vite)
 
@@ -48,6 +52,8 @@ CORS in `app.js` is hardcoded to `http://localhost:5173` with `credentials: true
 **State**: three contexts, not prop drilling. `AuthContext` (user + login/logout/updateCurrency, restores session via `/auth/me` on mount) is app-wide; `ExpenseContext` and `BudgetContext` are mounted only around the authenticated layout route. Both cache their list once per session and mutate it locally after a write instead of refetching. Both also clear their list **during render** (not in an effect) when the user goes null — deliberate, so one account's data is never briefly visible to the next. Both key their fetch effect on `user?.id`, **not the `user` object**: `AuthContext` returns a fresh object on every profile write, so depending on the object would refetch every expense and budget whenever someone changes their currency.
 
 **Confirmations**: use `Components/ConfirmDialog.tsx` (escape/overlay dismissal, focused confirm button, `isBusy` state, `tone="danger"`), never `window.confirm`. Expense deletion is wrapped in `hooks/useExpenseDelete.ts`, which owns the dialog state, the API call and the toast — spread its `dialogProps` onto a `<ConfirmDialog />` and pass `requestDelete` as `ExpenseTable`'s `onDelete`.
+
+**API base URL is relative on purpose.** `constants.ts` resolves to `/api/v1`; Vite proxies it in dev (`vite.config.ts`) and Vercel rewrites it in production. Never hardcode `http://localhost:8080` — that reintroduces CORS and breaks first-party cookies.
 
 **Routing**: `App.tsx` has a layout route wrapping `ProtectedRoute → ExpenseProvider → BudgetProvider → AppLayout`; `AppLayout` renders the sidebar plus an `<Outlet/>`, so `/dashboard`, `/expenses`, `/budgets` and `/settings` all share one sidebar instance and one data cache. `PublicOnlyRoute` bounces signed-in users off `/login` and `/register`. Unknown paths and `/` redirect to `/dashboard`.
 

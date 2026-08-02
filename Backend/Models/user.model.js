@@ -29,6 +29,25 @@ const userSchema = new mongoose.Schema(
       enum: SUPPORTED_CURRENCIES,
       default: "INR",
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    // OTP material is hidden by default; the verify controller opts in with
+    // .select("+otpHash +otpExpiresAt +otpAttempts").
+    otpHash: {
+      type: String,
+      select: false,
+    },
+    otpExpiresAt: {
+      type: Date,
+      select: false,
+    },
+    otpAttempts: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
     refreshToken: {
       type: String,
       select: false,

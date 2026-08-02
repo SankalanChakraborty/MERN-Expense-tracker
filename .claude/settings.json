@@ -23,7 +23,19 @@
       "Bash(lsof -ti:5173 -sTCP:LISTEN)",
       "Bash(xargs kill)",
       "Bash(node drive4.mjs)",
-      "Bash(node --check Middlewares/auth.middleware.js)"
+      "Bash(node --check Middlewares/auth.middleware.js)",
+      "Bash(npm pkg *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\(JSON.stringify\\({scripts:p.scripts,engines:p.engines},null,2\\)\\)\")",
+      "Bash(node -e \"import\\('nodemailer'\\).then\\(m=>console.log\\('nodemailer OK, version:', require\\('./node_modules/nodemailer/package.json'\\).version\\)\\).catch\\(e=>console.log\\('FAILED:', e.message\\)\\)\")",
+      "Bash(node /private/tmp/claude-501/-Users-sankalan-Documents-Projects-MERN-Expense-tracker/76e2dc53-f587-4c05-9cd1-803f383d40e7/scratchpad/integration.mjs)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('main:', p.main, '| exports:', JSON.stringify\\(p.exports\\)\\); \")",
+      "Bash(sed -i '' 's#mongodb-memory-server/lib/index.js#mongodb-memory-server/index.js#' /private/tmp/claude-501/-Users-sankalan-Documents-Projects-MERN-Expense-tracker/76e2dc53-f587-4c05-9cd1-803f383d40e7/scratchpad/integration.mjs)",
+      "Bash(mkdir -p /Users/sankalan/Documents/Projects/MERN-Expense-tracker/Backend/tests)",
+      "Bash(sed 's#const BACKEND = \"/Users/sankalan/Documents/Projects/MERN-Expense-tracker/Backend\";#import path from \"node:path\";\\\\nimport { fileURLToPath } from \"node:url\";\\\\nconst BACKEND = path.resolve\\(path.dirname\\(fileURLToPath\\(import.meta.url\\)\\), \"..\"\\);#' /private/tmp/claude-501/-Users-sankalan-Documents-Projects-MERN-Expense-tracker/76e2dc53-f587-4c05-9cd1-803f383d40e7/scratchpad/integration.mjs)",
+      "Bash(node tests/auth.integration.mjs)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('present in package.json:', !!\\(p.dependencies?.['mongodb-memory-server'] || p.devDependencies?.['mongodb-memory-server']\\)\\)\")",
+      "Bash(lsof -ti:8080 -sTCP:LISTEN)",
+      "Bash(SCENARIO_ENV=development node /private/tmp/claude-501/-Users-sankalan-Documents-Projects-MERN-Expense-tracker/76e2dc53-f587-4c05-9cd1-803f383d40e7/scratchpad/cors-check.mjs)"
     ]
   }
 }

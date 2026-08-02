@@ -27,6 +27,38 @@ export const registerLimiter = rateLimit({
   skip: (req, res) => process.env.NODE_ENV === "development",
 });
 
+// Guards the 6-digit code against online brute force. The per-user attempt
+// counter in verifyOtp is the other half of this: one caps guesses per account,
+// this caps them per IP across accounts.
+export const otpVerifyLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === "development",
+  handler: (req, res) => {
+    res.status(429).json({
+      status: "error",
+      message: "Too many verification attempts, try again later",
+    });
+  },
+});
+
+// Keeps the mail quota (and the user's inbox) from being used as a weapon.
+export const otpResendLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === "development",
+  handler: (req, res) => {
+    res.status(429).json({
+      status: "error",
+      message: "Too many code requests, try again in a few minutes",
+    });
+  },
+});
+
 export const refreshLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 10, // 10 attempts

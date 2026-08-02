@@ -16,9 +16,24 @@ export const register = (
   password: string,
   confirmPassword: string,
 ) =>
-  apiRequest<{ status: string; message: string }>("/auth/register", {
+  apiRequest<{ status: string; message: string; email: string }>(
+    "/auth/register",
+    {
+      method: "POST",
+      body: { userName, email, password, confirmPassword },
+    },
+  );
+
+export const verifyOtp = (email: string, otp: string) =>
+  apiRequest<{ status: string; message: string }>("/auth/verify-otp", {
     method: "POST",
-    body: { userName, email, password, confirmPassword },
+    body: { email, otp },
+  });
+
+export const resendOtp = (email: string) =>
+  apiRequest<{ status: string; message: string }>("/auth/resend-otp", {
+    method: "POST",
+    body: { email },
   });
 
 export const logout = () =>

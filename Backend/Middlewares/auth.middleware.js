@@ -36,7 +36,22 @@ export const authenticateToken = (req, res, next) => {
  * Should be last in middleware chain
  */
 export const errorHandler = (err, req, res, next) => {
-  console.error("Error:", err);
+  // Expected client errors (rejected CORS origin, bad id, bad token) are routine
+  // on a public API — log one line. Only unexpected failures get a stack trace,
+  // so real bugs stay findable instead of buried under bot traffic.
+  const EXPECTED = [
+    "ValidationError",
+    "CastError",
+    "JsonWebTokenError",
+    "TokenExpiredError",
+  ];
+  if ((err.statusCode && err.statusCode < 500) || EXPECTED.includes(err.name)) {
+    console.warn(
+      `${err.statusCode ?? err.name} ${req.method} ${req.originalUrl}: ${err.message}`,
+    );
+  } else {
+    console.error("Error:", err);
+  }
 
   // Mongoose validation errors
   if (err.name === "ValidationError") {
@@ -73,8 +88,14 @@ export const errorHandler = (err, req, res, next) => {
     return res.status(401).json({ status: "error", message: "Token expired" });
   }
 
-  res.status(err.statusCode || 500).json({
+  const statusCode = err.statusCode || 500;
+  // Never echo an unexpected error's message to the client in production — it
+  // can carry driver internals, query fragments or connection strings.
+  const isSafeToExpose =
+    statusCode < 500 || process.env.NODE_ENV !== "production";
+
+  res.status(statusCode).json({
     status: "error",
-    message: err.message || "Internal server error",
+    message: (isSafeToExpose && err.message) || "Internal server error",
   });
 };

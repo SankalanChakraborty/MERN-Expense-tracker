@@ -27,19 +27,14 @@ const RegisterUser = ({ setToastMessage }: RegisterUserProps) => {
     setConfirmPassword("");
   };
 
-  const navigateToLogin = () => {
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
-  };
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const data = await register(userName, email, password, confirmPassword);
       setToastMessage({ message: data.message, severity: "success" });
       clearForm();
-      navigateToLogin();
+      // Straight to the code screen — the account isn't usable until verified.
+      navigate("/verify-email", { state: { email: data.email ?? email } });
     } catch (error) {
       const message =
         error instanceof ApiError

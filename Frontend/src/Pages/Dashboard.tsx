@@ -8,13 +8,20 @@ import {
 import Button from "../Components/Button";
 import OverviewCards, { type StatTone } from "../Components/OverviewCards";
 import "../Styles/Dashboard.css";
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import AddExpense from "./AddExpense";
 import ExpenseTable from "../Components/ExpenseTable";
-import CategoryBreakdownChart from "../Components/CategoryBreakdownChart";
-import SpendingTrendChart from "../Components/SpendingTrendChart";
 import ConfirmDialog from "../Components/ConfirmDialog";
+
+// recharts is ~400kB of the bundle and is only needed here, so it loads on
+// demand rather than blocking first paint on Login/Expenses/Budgets/Settings.
+const CategoryBreakdownChart = lazy(
+  () => import("../Components/CategoryBreakdownChart"),
+);
+const SpendingTrendChart = lazy(
+  () => import("../Components/SpendingTrendChart"),
+);
 import type { ToastProps } from "../Components/Toast";
 import type { Expense } from "../types";
 import { useAuth } from "../context/AuthContext";
@@ -168,8 +175,12 @@ const Dashboard = ({ setToastMessage }: DashboardProps) => {
       </div>
 
       <div className="dashboard-charts">
-        <CategoryBreakdownChart expenses={currentMonthExpenses} />
-        <SpendingTrendChart expenses={expenses} />
+        <Suspense
+          fallback={<div className="chart-card chart-empty">Loading chart…</div>}
+        >
+          <CategoryBreakdownChart expenses={currentMonthExpenses} />
+          <SpendingTrendChart expenses={expenses} />
+        </Suspense>
       </div>
 
       <section className="recent-activity">

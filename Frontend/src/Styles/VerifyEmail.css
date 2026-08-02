@@ -1,0 +1,87 @@
+.otp-inputs {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.otp-digit {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  max-height: 60px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  background: var(--surface-sunken);
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.otp-digit:hover {
+  border-color: var(--color-white-12);
+}
+
+.otp-digit:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-focus-ring);
+  transform: translateY(-1px);
+}
+
+/* Filled digits read as "done" without needing a separate indicator. */
+.otp-digit:not(:placeholder-shown),
+.otp-digit[value]:not([value=""]) {
+  border-color: var(--color-accent-soft-border);
+}
+
+.login-form .welcome-header strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+  word-break: break-all;
+}
+
+.otp-resend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.otp-resend-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.otp-resend-btn:hover:not(:disabled) {
+  color: var(--color-accent-bright);
+  text-decoration: underline;
+}
+
+.otp-resend-btn:disabled {
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .otp-inputs {
+    gap: 7px;
+  }
+
+  .otp-digit {
+    font-size: 19px;
+    max-height: 52px;
+  }
+}

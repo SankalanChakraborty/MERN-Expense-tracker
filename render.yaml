@@ -1,0 +1,40 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Create the service from this file via Render > New > Blueprint, then fill in
+# the values marked sync:false in the dashboard (they are never committed).
+services:
+  - type: web
+    name: expensely-api
+    runtime: node
+    plan: free
+    rootDir: Backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Number of proxy hops to trust for client-IP resolution (rate limiting).
+      # Verify at /api/v1/health that clientIp is a real visitor address.
+      - key: TRUST_PROXY
+        value: "1"
+      # Set these in the Render dashboard — never commit them.
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET_ACCESS_TOKEN
+        sync: false
+      - key: JWT_SECRET_REFRESH_TOKEN
+        sync: false
+      # Your Vercel URL, e.g. https://expensely.vercel.app
+      - key: CLIENT_ORIGINS
+        sync: false
+      # SMTP for OTP verification emails (Brevo by default — see DEPLOYMENT.md).
+      - key: SMTP_HOST
+        value: smtp-relay.brevo.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: MAIL_FROM
+        sync: false
