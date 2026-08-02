@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://REPLACE-WITH-YOUR-RENDER-SERVICE.onrender.com/api/:path*"
+      "destination": "https://expensely-api.onrender.com/api/:path*"
     },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
