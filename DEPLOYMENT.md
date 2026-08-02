@@ -47,8 +47,10 @@ Any SMTP provider works — only these five values change.
 ## 3. Backend on Render
 
 1. **New → Web Service**, connect the repo.
-2. Root directory `Backend`, build `npm install`, start `npm start`.
-   (Or use **New → Blueprint**, which reads `render.yaml`.)
+2. Root directory `Backend`, build `npm ci --omit=dev`, start `npm start`.
+   (Or use **New → Blueprint**, which reads `render.yaml` and sets all of this.)
+   `--omit=dev` matters: `mongodb-memory-server` is a devDependency that
+   downloads a full MongoDB binary at install time.
 3. Health check path: `/api/v1/health`.
 4. Environment variables:
 
