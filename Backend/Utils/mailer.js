@@ -18,9 +18,57 @@ const getTransporter = () => {
     port,
     secure: port === 465, // 465 is implicit TLS; 587 upgrades via STARTTLS
     auth: { user: SMTP_USER, pass: SMTP_PASS },
+    // Without these nodemailer waits forever. Many PaaS providers (Render's
+    // free tier among them) silently drop outbound 25/465/587 to deter spam,
+    // which turns a signup into a request that hangs for minutes instead of
+    // failing. Fail fast so the caller can surface a real error.
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
 
   return cachedTransporter;
+};
+
+/**
+ * `"Expensely" <a@b.com>` -> { name, email }, which is the shape Brevo's HTTP
+ * API wants. Falls back to treating the whole string as an address.
+ */
+const parseSender = (raw) => {
+  const withName = /^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/.exec(raw ?? "");
+  if (withName) return { name: withName[1].trim(), email: withName[2].trim() };
+  return { email: (raw ?? "").trim() };
+};
+
+/**
+ * Brevo's transactional REST API. Preferred over SMTP in production because it
+ * is ordinary HTTPS on 443 — a port no host blocks — whereas SMTP ports are
+ * routinely firewalled off on free tiers.
+ */
+const sendViaBrevoApi = async ({ to, subject, html, text }) => {
+  const sender = parseSender(process.env.MAIL_FROM);
+
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": process.env.BREVO_API_KEY,
+      "Content-Type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender,
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+      textContent: text,
+    }),
+    signal: AbortSignal.timeout(15000),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(`Brevo API ${res.status}: ${detail.slice(0, 200)}`);
+  }
 };
 
 const buildHtml = (userName, otp) => `
@@ -48,6 +96,19 @@ const buildHtml = (userName, otp) => `
 `;
 
 export const sendVerificationEmail = async (to, userName, otp) => {
+  const message = {
+    to,
+    subject: `${otp} is your Expensely verification code`,
+    text: `Hi ${userName}, your Expensely verification code is ${otp}. It expires in 10 minutes.`,
+    html: buildHtml(userName, otp),
+  };
+
+  // Preferred path: HTTPS, so it works on hosts that firewall SMTP ports.
+  if (process.env.BREVO_API_KEY) {
+    await sendViaBrevoApi(message);
+    return { delivered: true, via: "api" };
+  }
+
   const transporter = getTransporter();
 
   if (!transporter) {
@@ -55,21 +116,18 @@ export const sendVerificationEmail = async (to, userName, otp) => {
       // Never silently swallow this in production — the user would sit waiting
       // for a mail that is never coming.
       throw new Error(
-        "SMTP is not configured (SMTP_HOST / SMTP_USER / SMTP_PASS)",
+        "Email is not configured (set BREVO_API_KEY, or SMTP_HOST / SMTP_USER / SMTP_PASS)",
       );
     }
-    // Local convenience: no SMTP account needed to exercise the flow.
+    // Local convenience: no mail account needed to exercise the flow.
     console.log(`[mailer] SMTP not configured. OTP for ${to}: ${otp}`);
     return { delivered: false };
   }
 
   await transporter.sendMail({
     from: process.env.MAIL_FROM ?? `"Expensely" <${process.env.SMTP_USER}>`,
-    to,
-    subject: `${otp} is your Expensely verification code`,
-    text: `Hi ${userName}, your Expensely verification code is ${otp}. It expires in 10 minutes.`,
-    html: buildHtml(userName, otp),
+    ...message,
   });
 
-  return { delivered: true };
+  return { delivered: true, via: "smtp" };
 };

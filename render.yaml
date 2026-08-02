@@ -30,7 +30,11 @@ services:
       # Your Vercel URL, e.g. https://expensely.vercel.app
       - key: CLIENT_ORIGINS
         sync: false
-      # SMTP for OTP verification emails (Brevo by default — see DEPLOYMENT.md).
+      # OTP verification email. Render's free tier blocks outbound SMTP ports
+      # (25/465/587), so the HTTP API is the working path here — SMTP would
+      # hang until it timed out. Keep the SMTP vars for local/other hosts.
+      - key: BREVO_API_KEY
+        sync: false
       - key: SMTP_HOST
         value: smtp-relay.brevo.com
       - key: SMTP_PORT

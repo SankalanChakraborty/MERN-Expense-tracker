@@ -28,6 +28,7 @@ process.env.PORT = "0";
 process.env.SMTP_HOST = "";
 process.env.SMTP_USER = "";
 process.env.SMTP_PASS = "";
+process.env.BREVO_API_KEY = "";
 
 // The dev mailer prints the code instead of sending it — capture it.
 let lastOtp = null;
