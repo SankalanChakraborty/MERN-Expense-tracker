@@ -21,10 +21,18 @@ export const loginLimiter = rateLimit({
 export const registerLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 3, // 3 attempts
-  message: "Too many registration attempts, try again later",
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req, res) => process.env.NODE_ENV === "development",
+  // Must be JSON: the frontend parses every error body as JSON and falls back
+  // to a generic "Something went wrong" when that fails — which would hide the
+  // real reason and invite the user to retry into the same wall.
+  handler: (req, res) => {
+    res.status(429).json({
+      status: "error",
+      message: "Too many registration attempts, try again later",
+    });
+  },
 });
 
 // Guards the 6-digit code against online brute force. The per-user attempt
@@ -62,7 +70,12 @@ export const otpResendLimiter = rateLimit({
 export const refreshLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 10, // 10 attempts
-  message: "Too many refresh attempts",
   standardHeaders: true,
   legacyHeaders: false,
+  handler: (req, res) => {
+    res.status(429).json({
+      status: "error",
+      message: "Too many refresh attempts, try again in a moment",
+    });
+  },
 });

@@ -17,6 +17,18 @@ process.env.JWT_SECRET_REFRESH_TOKEN = "test-refresh-secret-bbbbbbbbbbbbbbbb";
 process.env.NODE_ENV = "development"; // limiters skip; mailer logs the OTP
 process.env.PORT = "0";
 
+// Force the mailer's console fallback regardless of what the developer has in
+// .env. Without this, a machine with real SMTP configured sends live mail on
+// every test run (burning the provider quota) and the OTP is never printed, so
+// every assertion after registration fails.
+//
+// Set to "" rather than delete: app.js runs dotenv.config() on import, which
+// would repopulate deleted keys. dotenv never overwrites a key that already
+// exists in process.env, and "" is falsy where the mailer checks it.
+process.env.SMTP_HOST = "";
+process.env.SMTP_USER = "";
+process.env.SMTP_PASS = "";
+
 // The dev mailer prints the code instead of sending it — capture it.
 let lastOtp = null;
 const realLog = console.log;
